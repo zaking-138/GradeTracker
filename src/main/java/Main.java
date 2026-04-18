@@ -6,11 +6,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import tools.SceneFactory;
+import tools.SceneType;
 
 /**
  * @author Zachary King
  * <br>
- * created:
+ * created: 04/18/2026
  * @since 0.1.0
  */
 public class Main extends Application {
@@ -21,15 +23,10 @@ public class Main extends Application {
 
   @Override
   public void start(Stage stage) {
-    double scale = 0.85;
 
     stage.setTitle("Grade Tracker 5000");
-    BorderPane base = new BorderPane();
-    base.setCenter(new Text("Hello!"));
-    double width = Screen.getPrimary().getBounds().getWidth() * scale;
-    double height = Screen.getPrimary().getBounds().getHeight() * scale;
-    stage.setScene(new Scene(base, width, height));
-//    stage.setScene(SceneFactory.create(SceneType.LOGIN, stage));
+
+    stage.setScene(SceneFactory.create(SceneType.LOGIN, stage));
     stage.show();
   }
 }
