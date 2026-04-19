@@ -35,11 +35,19 @@ public class SceneFactory {
 
   // ── Helper functions ──────────────────────────────────────────────
 
+  /**
+   * Get width & height of screen multiplied by the default scale.
+   * @return a HashMap with entries "w" for width & "h" for height.
+   */
   public static HashMap<String, Double> getScreenSize(){
     double defaultVal = 0.85;
     return getScreenSize(defaultVal);
   }
 
+  /**
+   * Get width & height of screen multiplied by the provided scale.
+   * @return a HashMap with entries "w" for width & "h" for height.
+   */
   private static HashMap<String, Double> getScreenSize(Double scale){
     double width = Screen.getPrimary().getBounds().getWidth() * scale;
     double height = Screen.getPrimary().getBounds().getHeight() * scale;
