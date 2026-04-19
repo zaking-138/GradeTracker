@@ -1,5 +1,6 @@
 package tools;
 
+import java.util.HashMap;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
@@ -32,19 +33,32 @@ public class SceneFactory {
   }
 
 
-  // ── Scene builders ────────────────────────────────────────────────
+  // ── Helper functions ──────────────────────────────────────────────
+
+  public static HashMap<String, Double> getScreenSize(){
+    double defaultVal = 0.85;
+    return getScreenSize(defaultVal);
+  }
+
+  private static HashMap<String, Double> getScreenSize(Double scale){
+    double width = Screen.getPrimary().getBounds().getWidth() * scale;
+    double height = Screen.getPrimary().getBounds().getHeight() * scale;
+    HashMap<String, Double> rtrnMap = new HashMap<>();
+    rtrnMap.put("w", width);
+    rtrnMap.put("h", height);
+    return rtrnMap;
+  }
+
+
+  // ── Scene builders ──────────────────────────────────────────────
 
   private static Scene loginBuild(Stage stage) {
-    double windowScale = 0.85;
-
     BorderPane base = new BorderPane();
     Text message = new Text("Sign In:\n[username]\n[password]\n\n[[login]]");
     message.setFont(new Font(20));
     message.setTextAlignment(TextAlignment.CENTER);
     base.setCenter(message);
-    double width = Screen.getPrimary().getBounds().getWidth() * windowScale;
-    double height = Screen.getPrimary().getBounds().getHeight() * windowScale;
-    return new Scene(base, width, height);
+    return new Scene(base, getScreenSize().get("w"), getScreenSize().get("h"));
 
     //TODO
 //    return null;
