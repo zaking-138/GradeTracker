@@ -17,7 +17,7 @@ import javafx.stage.Stage;
  * @since 0.1.0
  */
 public class SceneFactory {
-  private static final int CLASSCODE_LENGTH = 3;
+  public static final int CLASSCODE_LENGTH = 3;
 
   public static Scene create(SceneType type, Stage stage){
     return switch (type){

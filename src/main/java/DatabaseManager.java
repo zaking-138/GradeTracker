@@ -133,4 +133,10 @@ public class DatabaseManager {
             System.err.println("createGradesTable failed: " + e.getMessage());
         }
     }
+
+    public void close() throws SQLException {
+        if (!connection.isClosed()){
+            connection.close();
+        }
+    }
 }
