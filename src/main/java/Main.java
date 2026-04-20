@@ -1,5 +1,6 @@
 import static javafx.application.Application.launch;
 
+import java.sql.SQLException;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -7,6 +8,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import tools.SceneFactory;
+import tools.SceneManager;
 import tools.SceneType;
 
 /**
@@ -23,10 +25,14 @@ public class Main extends Application {
 
   @Override
   public void start(Stage stage) {
-
+    SceneManager.init(stage);
     stage.setTitle("Grade Tracker 5000");
-
-    stage.setScene(SceneFactory.create(SceneType.LOGIN, stage));
+    SceneManager.getInstance().navigateTo(SceneType.LOGIN);
     stage.show();
+  }
+
+  @Override
+  public void stop() throws SQLException {
+    DatabaseManager.getInstance().close();
   }
 }
