@@ -5,7 +5,12 @@ import static tools.Helpers.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -59,10 +64,20 @@ public class SceneFactory {
         + stringClasses1 + "-->" + stringClasses2);
     message.setFont(new Font(20));
     message.setTextAlignment(TextAlignment.CENTER);
-    base.setCenter(message);
+
+    Button move = new Button("admindash");
+    move.setOnAction(e -> {
+      SceneManager.getInstance().navigateTo(SceneType.ADMIN_DASH);
+    });
+    VBox vbox01 = new VBox();
+    vbox01.getChildren().addAll(message, move);
+
+    base.setCenter(vbox01);
+
     return new Scene(base, getScreenSize().get("w"), getScreenSize().get("h"));
     // ── TEST CODE ──────────────────────────────────────────────
     // ── ./gradlew run ──────────────────────────────────────────
+
 
 
     //TODO
@@ -70,8 +85,24 @@ public class SceneFactory {
   }
 
   private static Scene adminDashBuild(Stage stage) {
-    //TODO
-    return null;
+    BorderPane base = new BorderPane();
+
+    Button logoutBtn = new Button("Logout");
+
+    Label welcomeLbl = new Label("Welcome, {admin name}!");
+
+    Label userListBtnLbl = new Label("Open full userlist: ");
+    Button userListBtn = new Button("Userlist");
+    HBox hbox01 = new HBox();
+    hbox01.getChildren().addAll(userListBtnLbl, userListBtn);
+
+    VBox vbox01 = new VBox();
+    vbox01.getChildren().addAll(welcomeLbl, hbox01);
+
+    base.setTop(logoutBtn);
+    base.setCenter(vbox01);
+
+    return new Scene(base, getScreenSize().get("w"), getScreenSize().get("h"));
   }
 
   private static Scene adminUserlistBuild(Stage stage) {
