@@ -172,6 +172,37 @@ public class DatabaseManager {
         }
     }
 
+    public void deleteUser(String username){
+        String sql = "DELETE FROM users WHERE username = ?";
+        try(PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            pstmt.executeUpdate();
+        }catch (SQLException e){
+            System.out.println("deleteUser failed: " + e.getMessage());
+        }
+    }
+
+    public void deleteCourse(String course_id){
+        String sql = "DELETE FROM courses WHERE course_id = ?";
+        try(PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, course_id);
+            pstmt.executeUpdate();
+        }catch (SQLException e){
+            System.out.println("deleteCourse failed: " + e.getMessage());
+        }
+    }
+
+    public void deleteGrades(String student_id, String assignment_id){
+        String sql = "DELETE FROM grades WHERE student_id = ? AND assignment_id = ?";
+        try(PreparedStatement psmt = connection.prepareStatement(sql)) {
+            psmt.setString(1, student_id);
+            psmt.setString(2, assignment_id);
+            psmt.executeUpdate();
+        }catch (SQLException e){
+            System.out.println("deleteGrades failed: " + e.getMessage());
+        }
+    }
+
     public void close() throws SQLException {
         try{
             if (connection != null && !connection.isClosed()){
