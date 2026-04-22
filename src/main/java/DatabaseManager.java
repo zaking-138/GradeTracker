@@ -1,3 +1,4 @@
+import javafx.collections.ObservableList;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -201,6 +202,24 @@ public class DatabaseManager {
         }catch (SQLException e){
             System.out.println("deleteGrades failed: " + e.getMessage());
         }
+    }
+
+    /**
+     * Could be a possible observable list for the return here
+     * @return
+     */
+    public List<String> getAllCourses(){
+        List<String> list = new ArrayList<>();
+        String sql = "SELECT * FROM courses ORDER BY course_code";
+        try(PreparedStatement pstm = connection.prepareStatement(sql)) {
+            ResultSet rs = pstm.executeQuery();
+            while (rs.next()) {
+                list.add(rs.getString("course_code"));
+            }
+        }catch (SQLException e){
+            System.out.println("getAllCourses failed: " + e.getMessage());
+        }
+        return list;
     }
 
     public void close() throws SQLException {
