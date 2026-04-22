@@ -134,9 +134,40 @@ public class DatabaseManager {
         }
     }
 
+    public void insertUser(String username, String password, String role){
+        String sql = "INSERT INTO users (username, password, role) VALUES (?, ?, ?)";
+        try(PreparedStatement pstmt = connection.prepareStatement(sql)){
+            pstmt.setString(1, username);
+            pstmt.setString(2, password);
+            pstmt.setString(3, role);
+            pstmt.executeUpdate();
+        }catch (SQLException e){
+            System.out.println("insertItem failed: " + e.getMessage());
+        }
+    }
+
+    public void insertCourse(String course_name, String course_code, Integer teacher_id){
+        String sql = "INSERT INTO courses (course_name, course_code, teacher_id) VALUES (?, ?, ?)";
+        try(PreparedStatement pstmt = connection.prepareStatement(sql)){
+            pstmt.setString(1, course_name);
+            pstmt.setString(2, course_code);
+            pstmt.setInt(3, teacher_id);
+            pstmt.executeUpdate();
+        }catch (SQLException e){
+            System.out.println("insertCourse failed: " + e.getMessage());
+        }
+    }
+
+
+
     public void close() throws SQLException {
-        if (!connection.isClosed()){
-            connection.close();
+
+        try{
+            if (connection != null && !connection.isClosed()){
+                connection.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }
