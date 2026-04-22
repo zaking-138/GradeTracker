@@ -4,6 +4,7 @@ import static tools.Helpers.*;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -69,6 +70,7 @@ public class SceneFactory {
     move.setOnAction(e -> {
       SceneManager.getInstance().navigateTo(SceneType.ADMIN_DASH);
     });
+
     VBox vbox01 = new VBox();
     vbox01.getChildren().addAll(message, move);
 
@@ -95,9 +97,11 @@ public class SceneFactory {
     Button userListBtn = new Button("Userlist");
     HBox hbox01 = new HBox();
     hbox01.getChildren().addAll(userListBtnLbl, userListBtn);
+    hbox01.setAlignment(Pos.CENTER);
 
     VBox vbox01 = new VBox();
     vbox01.getChildren().addAll(welcomeLbl, hbox01);
+    vbox01.setAlignment(Pos.CENTER);
 
     base.setTop(logoutBtn);
     base.setCenter(vbox01);
