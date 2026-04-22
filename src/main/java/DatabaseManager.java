@@ -158,10 +158,21 @@ public class DatabaseManager {
         }
     }
 
-
+    public void insertGrades(String student_id, String assignment_id, Integer score, String feedback){
+        String sql = "INSERT INTO grades (student_id, assignment_id, score, feedback) VALUES (?, ?, ?, ?)";
+        try(PreparedStatement pstmt = connection.prepareStatement(sql)){
+            pstmt.setString(1, student_id);
+            pstmt.setString(2, assignment_id);
+            pstmt.setInt(3, score);
+            pstmt.setString(4, feedback);
+            pstmt.executeUpdate();
+        }
+        catch (SQLException e){
+            System.out.println("insertGrades failed: " + e.getMessage());
+        }
+    }
 
     public void close() throws SQLException {
-
         try{
             if (connection != null && !connection.isClosed()){
                 connection.close();
