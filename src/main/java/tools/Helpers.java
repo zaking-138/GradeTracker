@@ -18,7 +18,7 @@ public class Helpers {
    * Get width & height of screen multiplied by the default scale.
    * @return a HashMap with entries "w" for width & "h" for height.
    */
-   static HashMap<String, Double> getScreenSize(){
+   public static HashMap<String, Double> getScreenSize(){
     double defaultVal = 0.85;
     return getScreenSize(defaultVal);
   }
@@ -42,7 +42,7 @@ public class Helpers {
    * @param numClasses an integer that should equal the length of the String.
    * @return a char array of size numClasses, containing the individual grades.
    */
-   static char[] parseGrades(String gradeString, int numClasses){
+   public static char[] parseGrades(String gradeString, int numClasses){
     assert (gradeString.length() == numClasses);
     char[] grades = new char[numClasses];
     for(int i = 0; i < numClasses; i++){
@@ -57,7 +57,7 @@ public class Helpers {
    * @param numClasses an integer that should be 1/3 the length of classCodeString.
    * @return a String array of size numClasses, containing the individual class codes.
    */
-   static String[] parseClasses(String classCodeString, int numClasses){
+   public static String[] parseClasses(String classCodeString, int numClasses){
     assert (classCodeString.length() == CLASSCODE_LENGTH * numClasses);
     String[] classCodes = new String[numClasses];
     int counter = 0;
@@ -80,7 +80,7 @@ public class Helpers {
    * @param grade a char, the new grade.
    * @return the original char[].
    */
-   static char[] editGrade(char[] grades, int classNumber, char grade){
+   public static char[] editGrade(char[] grades, int classNumber, char grade){
     assert (classNumber < grades.length);
     grades[classNumber] = grade;
     return grades;
@@ -93,7 +93,7 @@ public class Helpers {
    * @param classCode a String, the new class code.
    * @return the original String[].
    */
-   static String[] editClass(String[] classes, int classNumber, String classCode){
+   public static String[] editClass(String[] classes, int classNumber, String classCode){
     assert (classNumber * CLASSCODE_LENGTH < classes.length);
     assert (classCode.length() == CLASSCODE_LENGTH);
     classes[classNumber] = classCode;
@@ -105,7 +105,7 @@ public class Helpers {
    * @param grades a char[] of grades.
    * @return the char[] as a String.
    */
-   static String getGradeString(char[] grades){
+   public static String getGradeString(char[] grades){
     StringBuilder temp = new StringBuilder();
     for(char grade : grades){
       temp.append(grade);
@@ -118,7 +118,7 @@ public class Helpers {
    * @param classes a String[] of classes.
    * @return the String[] as a String.
    */
-   static String getClassString(String[] classes){
+   public static String getClassString(String[] classes){
     StringBuilder temp = new StringBuilder();
     for(String classCode : classes){
       temp.append(classCode);
