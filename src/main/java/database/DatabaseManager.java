@@ -1,6 +1,4 @@
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+package database;
 
 /**
  * Manages the SQLite connection and all CRUD operations for the items table.

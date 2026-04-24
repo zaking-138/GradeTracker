@@ -34,6 +34,9 @@ public class SceneManager {
   }
 
   public void navigateTo(SceneType type){
+    if(type.equals(SceneType.LOGIN)){
+      cache.remove(type);
+    }
     Scene scene = cache.computeIfAbsent(type,
         t -> SceneFactory.create(t, stage));
     stage.setScene(scene);

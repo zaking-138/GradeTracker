@@ -1,13 +1,9 @@
 import static javafx.application.Application.launch;
 
+import database.DatabaseManager;
 import java.sql.SQLException;
 import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.text.Text;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
-import tools.SceneFactory;
 import tools.SceneManager;
 import tools.SceneType;
 
