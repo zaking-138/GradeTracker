@@ -38,6 +38,7 @@ public class SceneFactory {
   public static Scene create(SceneType type, Stage stage){
     return switch (type){
       case LOGIN -> loginBuild(stage);
+      case SIGNUP -> signupBuild(stage);
 
       case ADMIN_DASH -> adminDashBuild(stage);
       case ADMIN_USERLIST -> adminUserlistBuild(stage);
