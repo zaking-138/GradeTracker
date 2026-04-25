@@ -10,7 +10,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -28,29 +27,6 @@ import tools.SceneType;
 public class LoginController {
   public static Scene loginBuild(Stage stage) {
 
-    BorderPane base = new BorderPane();
-    Label message = new Label("Login:");
-
-    TextField username = new TextField();
-    username.setPromptText("Username (5+ characters)...");
-    username.setMaxWidth(500);
-    Label usernameLbl = new Label("Username: ");
-    HBox usernameHBox = new HBox(usernameLbl, username);
-    usernameHBox.setAlignment(Pos.CENTER);
-
-    BorderPane base = new BorderPane();
-    Text message = new Text("Sign In:\n[username]\n[password]\n\n[[login]]\n"
-            + stringMes1 + "-->" + stringMes2 + "\n\n"
-            + stringClasses1 + "-->" + stringClasses2);
-    message.setFont(new Font(20));
-    message.setTextAlignment(TextAlignment.CENTER);
-    base.setCenter(message);
-    //return new Scene(base, getScreenSize().get("w"), getScreenSize().get("h"));
-    // ── TEST CODE ──────────────────────────────────────────────
-    // ── ./gradlew run ──────────────────────────────────────────
-
-
-    //TODO
     Label username_label = new Label("Username: ");
     Label password_label = new Label("Password: ");
 
@@ -74,12 +50,12 @@ public class LoginController {
 
 
     VBox root1 = new VBox(12,
-            username_label,
-            username_input,
-            password_label,
-            password_input,
-            login,
-            sign_up
+        username_label,
+        username_input,
+        password_label,
+        password_input,
+        login,
+        sign_up
     );
     root1.setPadding(new Insets(30));
     root1.setAlignment(Pos.CENTER);

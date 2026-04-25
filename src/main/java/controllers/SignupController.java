@@ -19,7 +19,7 @@ import tools.SceneType;
  * @version 0.1.0
  * @since 22/04/2026
  */
-public class SignupController {
+public class SignUpController {
     public static Scene signUpBuild(Stage stage) {
         Label username_label = new Label("Username: ");
         Label password_label = new Label("Password: ");
@@ -46,14 +46,14 @@ public class SignupController {
         login.setOnAction(e -> SceneManager.getInstance().navigateTo(SceneType.LOGIN));
 
         VBox root1 = new VBox(12,
-                username_label,
-                username_input,
-                class_label,
-                class_input,
-                password_label,
-                password_input,
-                login,
-                sign_up
+            username_label,
+            username_input,
+            class_label,
+            class_input,
+            password_label,
+            password_input,
+            login,
+            sign_up
         );
         root1.setPadding(new Insets(30));
         root1.setAlignment(Pos.CENTER);
