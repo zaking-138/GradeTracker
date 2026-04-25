@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -27,17 +28,15 @@ import tools.SceneType;
 public class LoginController {
   public static Scene loginBuild(Stage stage) {
 
-    // ── TEST CODE ──────────────────────────────────────────────
-    // ── DELETE IF NEEDED ───────────────────────────────────────
-    char[] mes1 = parseGrades("ABDC", "ABDC".length());
-    String stringMes1 = getGradeString(mes1);
-    editGrade(mes1, 2, 'F');
-    String stringMes2 = getGradeString(mes1);
+    BorderPane base = new BorderPane();
+    Label message = new Label("Login:");
 
-    String[] classes1 = parseClasses("M12N34L56", "M12N34L56".length()/3);
-    String stringClasses1 = getClassString(classes1);
-    editClass(classes1, 1, "J69");
-    String stringClasses2 = getClassString(classes1);
+    TextField username = new TextField();
+    username.setPromptText("Username (5+ characters)...");
+    username.setMaxWidth(500);
+    Label usernameLbl = new Label("Username: ");
+    HBox usernameHBox = new HBox(usernameLbl, username);
+    usernameHBox.setAlignment(Pos.CENTER);
 
     BorderPane base = new BorderPane();
     Text message = new Text("Sign In:\n[username]\n[password]\n\n[[login]]\n"
