@@ -2,8 +2,13 @@ package controllers;
 
 import static tools.Helpers.*;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -36,28 +41,51 @@ public class LoginController {
 
     BorderPane base = new BorderPane();
     Text message = new Text("Sign In:\n[username]\n[password]\n\n[[login]]\n"
-        + stringMes1 + "-->" + stringMes2 + "\n\n"
-        + stringClasses1 + "-->" + stringClasses2);
+            + stringMes1 + "-->" + stringMes2 + "\n\n"
+            + stringClasses1 + "-->" + stringClasses2);
     message.setFont(new Font(20));
     message.setTextAlignment(TextAlignment.CENTER);
-
-    Button move = new Button("admindash");
-    move.setOnAction(e -> {
-      SceneManager.getInstance().navigateTo(SceneType.ADMIN_DASH);
-    });
-
-    VBox vbox01 = new VBox();
-    vbox01.getChildren().addAll(message, move);
-
-    base.setCenter(vbox01);
-
-    return new Scene(base, getScreenSize().get("w"), getScreenSize().get("h"));
+    base.setCenter(message);
+    //return new Scene(base, getScreenSize().get("w"), getScreenSize().get("h"));
     // ── TEST CODE ──────────────────────────────────────────────
     // ── ./gradlew run ──────────────────────────────────────────
 
 
-
     //TODO
-//    return null;
+    Label username_label = new Label("Username: ");
+    Label password_label = new Label("Password: ");
+
+    TextField username_input = new TextField();
+    username_input.setPromptText("Username");
+    PasswordField password_input = new PasswordField();
+    password_input.setPromptText("Password");
+
+    Button sign_up = new Button("SIGN UP");
+    Button login = new Button("LOGIN");
+
+
+    login.setOnAction(e -> {
+      String username = username_input.getText();
+      String password = password_input.getText();
+
+
+    });
+
+    sign_up.setOnAction(e -> SceneManager.getInstance().navigateTo(SceneType.SIGNUP));
+
+
+    VBox root1 = new VBox(12,
+            username_label,
+            username_input,
+            password_label,
+            password_input,
+            login,
+            sign_up
+    );
+    root1.setPadding(new Insets(30));
+    root1.setAlignment(Pos.CENTER);
+
+    Scene login_scene = new Scene(root1);
+    return login_scene;
   }
 }

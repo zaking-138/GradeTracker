@@ -3,6 +3,7 @@ package tools;
 import static controllers.AdminDashboardController.*;
 import static controllers.AdminUserlistController.adminUserlistBuild;
 import static controllers.LoginController.*;
+import static controllers.SignupController.*;
 import static controllers.ProfessorDashboardController.profDashBuild;
 import static controllers.ProfessorGradebookController.profGrdBkBuild;
 import static controllers.ProfessorUserlistController.profUserlistBuild;
@@ -38,6 +39,7 @@ public class SceneFactory {
   public static Scene create(SceneType type, Stage stage){
     return switch (type){
       case LOGIN -> loginBuild(stage);
+      case SIGNUP -> signUpBuild(stage);
 
       case ADMIN_DASH -> adminDashBuild(stage);
       case ADMIN_USERLIST -> adminUserlistBuild(stage);
