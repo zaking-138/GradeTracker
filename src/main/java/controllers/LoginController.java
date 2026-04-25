@@ -2,11 +2,8 @@ package controllers;
 
 import static tools.Helpers.*;
 
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -41,64 +38,53 @@ public class LoginController {
     HBox usernameHBox = new HBox(usernameLbl, username);
     usernameHBox.setAlignment(Pos.CENTER);
 
-    Label usernameErrorLabel = new Label("Invalid username! Must be of length 5 or greater.");
-    usernameErrorLabel.setVisible(false);
-
-    PasswordField password = new PasswordField();
-    password.setPromptText("Password (5+ characters)...");
-    password.setMaxWidth(500);
-    Label passwordLbl = new Label("Password: ");
-    HBox passwordHBox = new HBox(passwordLbl, password);
-    passwordHBox.setAlignment(Pos.CENTER);
-
-    Label passwordErrorLabel = new Label();
-    passwordErrorLabel.setVisible(false);
-
-    Label revealedPassword = new Label();
-    revealedPassword.setVisible(false);
-
-    Button showPasswordBtn = new Button("Show Password");
-    showPasswordBtn.setOnAction(e -> {
-      if(showPasswordBtn.getText().equals("Hide Password")){
-        revealedPassword.setVisible(false);
-        revealedPassword.setText("");
-        showPasswordBtn.setText("Show Password");
-      }else if (showPasswordBtn.getText().equals("Show Password") && !password.getText().isEmpty()){
-        revealedPassword.setText("password: " + password.getText());
-        revealedPassword.setVisible(true);
-        showPasswordBtn.setText("Hide Password");
-      }
-    });
-    Button loginBtn = new Button("Login");
-    Button registerBtn = new Button("Register");
-    registerBtn.setOnAction(e -> {
-      SceneManager.getInstance().navigateTo(SceneType.SIGN_UP);
-    });
-
-    HBox btnsBox = new HBox(showPasswordBtn, loginBtn);
-    btnsBox.setAlignment(Pos.CENTER);
-    btnsBox.setSpacing(5);
-    btnsBox.setPadding(new Insets(5));
-
-    VBox vbox01 = new VBox();
-    vbox01.setAlignment(Pos.CENTER);
-    vbox01.getChildren().addAll(message, usernameHBox, usernameErrorLabel,
-        passwordHBox, passwordErrorLabel, revealedPassword, btnsBox, registerBtn);
-
-    base.setCenter(vbox01);
-
-    loginBtn.setOnAction(e -> {
-
-      SceneManager.getInstance().navigateTo(SceneType.ADMIN_DASH);
-    });
-
-    return new Scene(base, getScreenSize().get("w"), getScreenSize().get("h"));
+    BorderPane base = new BorderPane();
+    Text message = new Text("Sign In:\n[username]\n[password]\n\n[[login]]\n"
+            + stringMes1 + "-->" + stringMes2 + "\n\n"
+            + stringClasses1 + "-->" + stringClasses2);
+    message.setFont(new Font(20));
+    message.setTextAlignment(TextAlignment.CENTER);
+    base.setCenter(message);
+    //return new Scene(base, getScreenSize().get("w"), getScreenSize().get("h"));
     // ── TEST CODE ──────────────────────────────────────────────
     // ── ./gradlew run ──────────────────────────────────────────
 
 
-
     //TODO
-//    return null;
+    Label username_label = new Label("Username: ");
+    Label password_label = new Label("Password: ");
+
+    TextField username_input = new TextField();
+    username_input.setPromptText("Username");
+    PasswordField password_input = new PasswordField();
+    password_input.setPromptText("Password");
+
+    Button sign_up = new Button("SIGN UP");
+    Button login = new Button("LOGIN");
+
+
+    login.setOnAction(e -> {
+      String username = username_input.getText();
+      String password = password_input.getText();
+
+
+    });
+
+    sign_up.setOnAction(e -> SceneManager.getInstance().navigateTo(SceneType.SIGNUP));
+
+
+    VBox root1 = new VBox(12,
+            username_label,
+            username_input,
+            password_label,
+            password_input,
+            login,
+            sign_up
+    );
+    root1.setPadding(new Insets(30));
+    root1.setAlignment(Pos.CENTER);
+
+    Scene login_scene = new Scene(root1);
+    return login_scene;
   }
 }

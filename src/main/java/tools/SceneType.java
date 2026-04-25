@@ -9,7 +9,7 @@ package tools;
 public enum SceneType {
   // Start screen/login.
   LOGIN,
-  SIGN_UP,
+  SIGNUP,
 
   // Admin scene versions.
   ADMIN_DASH,
