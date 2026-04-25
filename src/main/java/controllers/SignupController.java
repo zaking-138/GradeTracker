@@ -20,7 +20,7 @@ import tools.SceneType;
  * @since 22/04/2026
  */
 public class SignupController {
-    public static Scene signupBuild(Stage stage) {
+    public static Scene signUpBuild(Stage stage) {
         Label username_label = new Label("Username: ");
         Label password_label = new Label("Password: ");
         Label class_label = new Label("Class: ");
@@ -30,6 +30,7 @@ public class SignupController {
         PasswordField password_input = new PasswordField();
 
         username_input.setPromptText("Username");
+        class_input.setPromptText("Class");
         password_input.setPromptText("Password");
 
         Button sign_up = new Button("SIGN UP");
@@ -47,6 +48,8 @@ public class SignupController {
         VBox root1 = new VBox(12,
                 username_label,
                 username_input,
+                class_label,
+                class_input,
                 password_label,
                 password_input,
                 login,
