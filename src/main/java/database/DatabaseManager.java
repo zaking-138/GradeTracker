@@ -1,3 +1,7 @@
+package database;
+
+import java.util.HashMap;
+import java.util.Map;
 import javafx.collections.ObservableList;
 import java.sql.*;
 import java.util.ArrayList;
@@ -268,11 +272,24 @@ public class DatabaseManager {
     }
 
     public void updateUser(int user_id, String username, String password, String role){
+        Map<String, String> oldInfo = getUser(user_id);
         String sql =  "UPDATE users SET username = ?, password = ?, role = ? WHERE user_id = ?";
         try(PreparedStatement pstmt = connection.prepareStatement(sql)){
-            pstmt.setString(1, username);
-            pstmt.setString(2, password);
-            pstmt.setString(3, role);
+            if(!username.isEmpty()){
+                pstmt.setString(1, username);
+            }else{
+                pstmt.setString(1, oldInfo.get("username"));
+            }
+            if(!password.isEmpty()){
+                pstmt.setString(2, password);
+            }else{
+                pstmt.setString(2, oldInfo.get("password"));
+            }
+            if(!role.isEmpty()){
+                pstmt.setString(3, role);
+            }else{
+                pstmt.setString(3, oldInfo.get("role"));
+            }
             pstmt.setInt(4, user_id);
             pstmt.executeUpdate();
         }
@@ -400,6 +417,37 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             System.out.println("getAllStudents failed: " + e.getMessage());
+        }
+        return list;
+    }
+
+    public Map<String, String> getUser(int user_id) {
+        Map<String, String> userInfo = new HashMap<>();
+        String sql = "SELECT username, password, role FROM users WHERE user_id = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, user_id);
+            ResultSet rs = pstmt.executeQuery();
+            userInfo.put("username", rs.getString("username"));
+            userInfo.put("password", rs.getString("password"));
+            userInfo.put("role", rs.getString("role"));
+        } catch (SQLException e) {
+            System.out.println("getAllStudents failed: " + e.getMessage());
+        }
+        return userInfo;
+    }
+
+    public List<String> getAllUsers() {
+        List<String> list = new ArrayList<>();
+        String sql = "SELECT user_id, username, password, role FROM users ORDER BY username";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                String row = rs.getInt("user_id") + "\t" + rs.getString("username")
+                    + "  \t" + rs.getString("role") + "\t\t" + rs.getString("password");
+                list.add(row);
+            }
+        } catch (SQLException e) {
+            System.out.println("getAllUsers failed: " + e.getMessage());
         }
         return list;
     }

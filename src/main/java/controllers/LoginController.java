@@ -30,53 +30,67 @@ import tools.SceneType;
  */
 public class LoginController {
   public static Scene loginBuild(Stage stage) {
-    // ── TEST CODE ──────────────────────────────────────────────
-    // ── DELETE IF NEEDED ───────────────────────────────────────
-//    char[] mes1 = parseGrades("ABDC", "ABDC".length());
-//    String stringMes1 = getGradeString(mes1);
-//    editGrade(mes1, 2, 'F');
-//    String stringMes2 = getGradeString(mes1);
-//
-//    String[] classes1 = parseClasses("M12N34L56", "M12N34L56".length()/3);
-//    String stringClasses1 = getClassString(classes1);
-//    editClass(classes1, 1, "J69");
-//    String stringClasses2 = getClassString(classes1);
 
     BorderPane base = new BorderPane();
-    Label message = new Label("Sign In:");
+    Label message = new Label("Login:");
 
     TextField username = new TextField();
-    username.setPromptText("Username...");
+    username.setPromptText("Username (5+ characters)...");
     username.setMaxWidth(500);
+    Label usernameLbl = new Label("Username: ");
+    HBox usernameHBox = new HBox(usernameLbl, username);
+    usernameHBox.setAlignment(Pos.CENTER);
+
+    Label usernameErrorLabel = new Label("Invalid username! Must be of length 5 or greater.");
+    usernameErrorLabel.setVisible(false);
 
     PasswordField password = new PasswordField();
-    password.setPromptText("Password...");
+    password.setPromptText("Password (5+ characters)...");
     password.setMaxWidth(500);
+    Label passwordLbl = new Label("Password: ");
+    HBox passwordHBox = new HBox(passwordLbl, password);
+    passwordHBox.setAlignment(Pos.CENTER);
 
-    Button showPasswordBtn = new Button("Hide");
+    Label passwordErrorLabel = new Label();
+    passwordErrorLabel.setVisible(false);
+
+    Label revealedPassword = new Label();
+    revealedPassword.setVisible(false);
+
+    Button showPasswordBtn = new Button("Show Password");
+    showPasswordBtn.setOnAction(e -> {
+      if(showPasswordBtn.getText().equals("Hide Password")){
+        revealedPassword.setVisible(false);
+        revealedPassword.setText("");
+        showPasswordBtn.setText("Show Password");
+      }else if (showPasswordBtn.getText().equals("Show Password") && !password.getText().isEmpty()){
+        revealedPassword.setText("password: " + password.getText());
+        revealedPassword.setVisible(true);
+        showPasswordBtn.setText("Hide Password");
+      }
+    });
     Button loginBtn = new Button("Login");
-//    message.setFont(new Font(20));
-//    message.setTextAlignment(TextAlignment.CENTER);
-//    move.setOnAction(e -> {
-//      SceneManager.getInstance().navigateTo(SceneType.ADMIN_USERLIST);
-//    });
+    Button registerBtn = new Button("Register");
+    registerBtn.setOnAction(e -> {
+      SceneManager.getInstance().navigateTo(SceneType.SIGN_UP);
+    });
+
     HBox btnsBox = new HBox(showPasswordBtn, loginBtn);
     btnsBox.setAlignment(Pos.CENTER);
+    btnsBox.setSpacing(5);
+    btnsBox.setPadding(new Insets(5));
 
     VBox vbox01 = new VBox();
     vbox01.setAlignment(Pos.CENTER);
-    vbox01.getChildren().addAll(message, username, password, btnsBox);
-
-//    Label blank00 = new Label();
-//    TextField blank01 = new TextField();
-//    Button blank03 = new Button();
-//    VBox vbox00 = new VBox();
-//    vbox00.setAlignment(Pos.CENTER_LEFT);
-//    vbox00.getChildren().addAll(blank00, blank01, showPasswordBtn, blank03);
-
-//    HBox hbox00 = new HBox(vbox01, vbox00);
+    vbox01.getChildren().addAll(message, usernameHBox, usernameErrorLabel,
+        passwordHBox, passwordErrorLabel, revealedPassword, btnsBox, registerBtn);
 
     base.setCenter(vbox01);
+
+    loginBtn.setOnAction(e -> {
+
+      SceneManager.getInstance().navigateTo(SceneType.ADMIN_DASH);
+    });
 
     return new Scene(base, getScreenSize().get("w"), getScreenSize().get("h"));
     // ── TEST CODE ──────────────────────────────────────────────

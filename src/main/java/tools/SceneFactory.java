@@ -6,6 +6,7 @@ import static controllers.LoginController.*;
 import static controllers.ProfessorDashboardController.profDashBuild;
 import static controllers.ProfessorGradebookController.profGrdBkBuild;
 import static controllers.ProfessorUserlistController.profUserlistBuild;
+import static controllers.SignUpController.signUpBuild;
 import static controllers.StudentDashboardController.stdntDashBuild;
 import static controllers.StudentGradebookController.stdntGrdBkBuild;
 import static tools.Helpers.*;
@@ -39,6 +40,7 @@ public class SceneFactory {
     return switch (type){
       case LOGIN -> loginBuild(stage);
 
+      case SIGN_UP -> signUpBuild(stage);
       case ADMIN_DASH -> adminDashBuild(stage);
       case ADMIN_USERLIST -> adminUserlistBuild(stage);
 
