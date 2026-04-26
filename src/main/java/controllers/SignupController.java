@@ -19,7 +19,7 @@ import tools.SceneType;
  * @version 0.1.0
  * @since 22/04/2026
  */
-public class SignUpController {
+public class SignupController {
     public static Scene signUpBuild(Stage stage) {
         Label username_label = new Label("Username: ");
         Label password_label = new Label("Password: ");
