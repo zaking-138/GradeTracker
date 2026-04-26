@@ -40,6 +40,7 @@ public class SceneFactory {
     return switch (type){
       case LOGIN -> loginBuild(stage);
       case SIGNUP -> signUpBuild(stage);
+      case SIGNUP_POPUP -> signUpPopup(stage);
 
       case ADMIN_DASH -> adminDashBuild(stage);
       case ADMIN_USERLIST -> adminUserlistBuild(stage);

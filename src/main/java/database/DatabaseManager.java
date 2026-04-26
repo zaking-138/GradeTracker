@@ -438,7 +438,7 @@ public class DatabaseManager {
 
     public List<String> getAllUsers() {
         List<String> list = new ArrayList<>();
-        String sql = "SELECT user_id, username, password, role FROM users ORDER BY username";
+        String sql = "SELECT user_id, username, password, role FROM users ORDER BY user_id";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {

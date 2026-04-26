@@ -3,12 +3,15 @@ package controllers;
 import static tools.Helpers.getScene;
 import static tools.Helpers.getScreenSize;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import tools.SceneManager;
@@ -26,7 +29,7 @@ public class AdminDashboardController {
 
     Button logoutBtn = new Button("Logout");
     logoutBtn.setOnAction(e -> {
-      SceneManager.getInstance().navigateTo(SceneType.LOGIN);
+      SceneManager.getInstance().navigateTo(SceneType.LOGIN, true);
     });
 
     Label welcomeLbl = new Label("Welcome, {admin name}!");
@@ -34,7 +37,7 @@ public class AdminDashboardController {
     Label userListBtnLbl = new Label("Open full userlist: ");
     Button userListBtn = new Button("Userlist");
     userListBtn.setOnAction(e -> {
-      SceneManager.getInstance().navigateTo(SceneType.ADMIN_USERLIST);
+      SceneManager.getInstance().navigateTo(SceneType.ADMIN_USERLIST, true);
     });
 
     HBox hbox01 = new HBox();
@@ -42,11 +45,14 @@ public class AdminDashboardController {
     hbox01.setAlignment(Pos.CENTER);
 
     VBox vbox01 = new VBox();
+    Pane vBoxSpacer = new Pane();
+    VBox.setVgrow(vBoxSpacer, Priority.ALWAYS);
     vbox01.getChildren().addAll(welcomeLbl, hbox01);
     vbox01.setAlignment(Pos.CENTER);
 
-    base.setTop(logoutBtn);
     base.setCenter(vbox01);
+    base.setBottom(logoutBtn);
+    BorderPane.setMargin(logoutBtn, new Insets(16));
 
     return getScene(base);
   }

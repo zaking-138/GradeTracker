@@ -17,6 +17,10 @@ public class Helpers {
   public static final int CLASSCODE_LENGTH = 3;
   
   // ── Helper functions ──────────────────────────────────────────────
+  public static void setVisible(Node node, boolean visible){
+    node.setVisible(visible);
+    node.setManaged(visible);
+  }
 
   /**
    * Returns a scene using getScreenSize() with default scale.
@@ -25,6 +29,10 @@ public class Helpers {
    */
   public static Scene getScene(Parent root){
     return new Scene(root, getScreenSize().get("w"), getScreenSize().get("h"));
+  }
+
+  public static Scene getScene(Parent root, double scale){
+    return new Scene(root, getScreenSize(scale).get("w"), getScreenSize(scale).get("h"));
   }
 
   /**
