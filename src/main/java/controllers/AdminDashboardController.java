@@ -1,5 +1,6 @@
 package controllers;
 
+import static tools.Helpers.getScene;
 import static tools.Helpers.getScreenSize;
 
 import javafx.geometry.Pos;
@@ -47,6 +48,6 @@ public class AdminDashboardController {
     base.setTop(logoutBtn);
     base.setCenter(vbox01);
 
-    return new Scene(base, getScreenSize().get("w"), getScreenSize().get("h"));
+    return getScene(base);
   }
 }

@@ -1,5 +1,7 @@
 package controllers;
 
+import static tools.Helpers.getScene;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -19,11 +21,11 @@ import tools.SceneType;
  * @version 0.1.0
  * @since 22/04/2026
  */
-public class SignUpController {
-  public static Scene signUpBuild(Stage stage) {
-    Label username_label = new Label("Username: ");
-    Label password_label = new Label("Password: ");
-    Label class_label = new Label("Class: ");
+public class SignupController {
+    public static Scene signUpBuild(Stage stage) {
+        Label username_label = new Label("Username: ");
+        Label password_label = new Label("Password: ");
+        Label class_label = new Label("Class: ");
 
     TextField username_input = new TextField();
     TextField class_input = new TextField();
@@ -58,7 +60,6 @@ public class SignUpController {
     root1.setPadding(new Insets(30));
     root1.setAlignment(Pos.CENTER);
 
-    Scene signup_scene = new Scene(root1);
-    return signup_scene;
-  }
+        return getScene(root1);
+    }
 }

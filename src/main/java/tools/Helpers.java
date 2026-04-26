@@ -2,6 +2,9 @@ package tools;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Screen;
 
 /**
@@ -14,6 +17,15 @@ public class Helpers {
   public static final int CLASSCODE_LENGTH = 3;
   
   // ── Helper functions ──────────────────────────────────────────────
+
+  /**
+   * Returns a scene using getScreenSize() with default scale.
+   * @param root the root node of the scene.
+   * @return a newly generated scene.
+   */
+  public static Scene getScene(Parent root){
+    return new Scene(root, getScreenSize().get("w"), getScreenSize().get("h"));
+  }
 
   /**
    * Get width & height of screen multiplied by the default scale.

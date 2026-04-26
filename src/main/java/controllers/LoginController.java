@@ -60,7 +60,6 @@ public class LoginController {
     root1.setPadding(new Insets(30));
     root1.setAlignment(Pos.CENTER);
 
-    Scene login_scene = new Scene(root1);
-    return login_scene;
+    return getScene(root1);
   }
 }
