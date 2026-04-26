@@ -1,6 +1,6 @@
 package controllers;
 
-import static tools.Helpers.getScreenSize;
+import static tools.Helpers.*;
 
 import database.DatabaseManager;
 import java.util.HashMap;
@@ -76,10 +76,11 @@ public class AdminUserlistController {
     HBox.setHgrow(inputField, Priority.ALWAYS);
     editRow.getChildren().addAll(new Label("Select field: "),
         fieldSelection, new Label("New Value: "), inputField);
-    editRow.setVisible(false);
+    setVisible(editRow, false);
 
     Button editUserBtn = new Button("Edit");
     Button removeUserBtn = new Button("Remove");
+    Button addUserBtn = new Button("Add User");
     Label noSelectionErrorLbl = new Label(errorList.get("no_selection"));
 //    Button addBtn  = new Button("Add");
     listView.getItems().add("ID\tUsername\t\tRole\t\tPassword");
@@ -87,7 +88,7 @@ public class AdminUserlistController {
 
     listView.setOnMouseClicked(e -> {
       noSelectionErrorLbl.setText(" ");
-      noSelectionErrorLbl.setVisible(false);
+      setVisible(noSelectionErrorLbl, false);
       String selectedItem = listView.getSelectionModel().getSelectedItem();
       if(selectedItem != null && !selectedItem.isEmpty()){
         String temp = selectedItem.split("\t")[0];
@@ -102,7 +103,7 @@ public class AdminUserlistController {
         System.out.println("Selected user: " + selectedUserId);
 
         inputField.setPromptText(selectedRow);
-        editRow.setVisible(true);
+        setVisible(editRow, true);
       }
     });
 
@@ -113,17 +114,17 @@ public class AdminUserlistController {
 
       if(grabField == null){
         noSelectionErrorLbl.setText(errorList.get("no_field_selection"));
-        noSelectionErrorLbl.setVisible(true);
+        setVisible(noSelectionErrorLbl, true);
         return;
       }
 
       if(grabNewValue == null || grabNewValue.isEmpty()){
         noSelectionErrorLbl.setText(errorList.get("no_entry"));
-        noSelectionErrorLbl.setVisible(true);
+        setVisible(noSelectionErrorLbl, true);
         return;
       }
       noSelectionErrorLbl.setText(errorList.get("success"));
-      noSelectionErrorLbl.setVisible(true);
+      setVisible(noSelectionErrorLbl, true);
       System.out.println(selectedUserId + ": " + grabField + " --> " + grabNewValue);
       Map<String, String> userInfo = DatabaseManager.getInstance().getUser(selectedUserId);
       System.out.println(userInfo.get("username") + " " + userInfo.get("password") + " " + userInfo.get("role"));
@@ -141,19 +142,25 @@ public class AdminUserlistController {
       SceneManager.getInstance().navigateTo(SceneType.ADMIN_DASH);
     });
 
+    addUserBtn.setOnAction(e -> {
+      Stage popup = new Stage();
+      SceneManager.getInstance().navigateToCopy(SceneType.SIGNUP_POPUP, popup);
+      popup.show();
+    });
+
     HBox btnsRow = new HBox(8);
     btnsRow.setAlignment(Pos.CENTER);
     Pane btnsRowSpacer = new Pane();
     HBox.setHgrow(btnsRowSpacer, Priority.ALWAYS);
     Pane btnsRowSpacer01 = new Pane();
     HBox.setHgrow(btnsRowSpacer01, Priority.ALWAYS);
-    noSelectionErrorLbl.setVisible(false);
-    btnsRow.getChildren().addAll(editUserBtn, btnsRowSpacer, noSelectionErrorLbl, btnsRowSpacer01, removeUserBtn);
+    setVisible(noSelectionErrorLbl, false);
+    btnsRow.getChildren().addAll(editUserBtn, btnsRowSpacer, addUserBtn, btnsRowSpacer01, removeUserBtn);
 
 //    HBox.setHgrow(removeUserBtn, Priority.ALWAYS);
     Pane vBoxSpacer = new Pane();
     VBox.setVgrow(vBoxSpacer, Priority.ALWAYS);
-    VBox layout = new VBox(12, title, listView, btnsRow, editRow, vBoxSpacer, backBtn);
+    VBox layout = new VBox(12, title, listView, editRow, btnsRow, noSelectionErrorLbl, vBoxSpacer, backBtn);
     layout.setPadding(new Insets(16));
     return new Scene(layout, getScreenSize().get("w"), getScreenSize().get("h"));
   }

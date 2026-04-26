@@ -33,10 +33,21 @@ public class SceneManager {
     return instance;
   }
 
-  public void navigateTo(SceneType type){
-    if(type.equals(SceneType.LOGIN)){
+  public void navigateToCopy(SceneType type, Stage newStage){
+    cache.remove(type);
+    Scene scene = cache.computeIfAbsent(type,
+        t -> SceneFactory.create(t, stage));
+    newStage.setScene(scene);
+  }
+
+  public void navigateTo(SceneType type, boolean fresh){
+    if(fresh){
       cache.remove(type);
     }
+    navigateTo(type);
+  }
+
+  public void navigateTo(SceneType type){
     Scene scene = cache.computeIfAbsent(type,
         t -> SceneFactory.create(t, stage));
     stage.setScene(scene);

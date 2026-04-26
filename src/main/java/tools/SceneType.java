@@ -10,6 +10,7 @@ public enum SceneType {
   // Start screen/login.
   LOGIN,
   SIGNUP,
+  SIGNUP_POPUP,
 
   // Admin scene versions.
   ADMIN_DASH,
