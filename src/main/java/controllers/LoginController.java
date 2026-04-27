@@ -26,7 +26,7 @@ import tools.SceneType;
  */
 public class LoginController {
   public static Scene loginBuild(Stage stage) {
-
+/*
     // ── TEST CODE ──────────────────────────────────────────────
     // ── DELETE IF NEEDED ───────────────────────────────────────
     char[] mes1 = parseGrades("ABDC", "ABDC".length());
@@ -50,6 +50,8 @@ public class LoginController {
     // ── TEST CODE ──────────────────────────────────────────────
     // ── ./gradlew run ──────────────────────────────────────────
 
+ */
+
 
     //TODO
     Label username_label = new Label("Username: ");
@@ -67,7 +69,6 @@ public class LoginController {
     login.setOnAction(e -> {
       String username = username_input.getText();
       String password = password_input.getText();
-
 
     });
 
