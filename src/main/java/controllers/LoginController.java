@@ -19,8 +19,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import tools.SceneFactory;
 import tools.SceneManager;
 import tools.SceneType;
+import database.DatabaseManager;
+
+import javax.xml.crypto.Data;
 
 /**
  * @author Sebastien Wu
@@ -30,6 +34,7 @@ import tools.SceneType;
  */
 public class LoginController {
   public static Scene loginBuild(Stage stage) {
+    DatabaseManager db = DatabaseManager.getInstance();
     BorderPane base = new BorderPane();
     Label header = new Label("Sign In:");
     header.setPadding(new Insets(8));
@@ -60,12 +65,15 @@ public class LoginController {
     HBox passwordHBox = new HBox(8, password_label, password_input);
     passwordHBox.setAlignment(Pos.CENTER);
 
+    Button admin_test = new Button("ADMIN LOGIN");
     Button sign_up = new Button("SIGN UP");
     Button login = new Button("LOGIN");
     HBox buttonsBox = new HBox(8, sign_up, login);
     buttonsBox.setAlignment(Pos.CENTER);
 
     Button showPasswordBtn = new Button("Show Password");
+
+    Label errorLbl = new Label();
 
     showPasswordBtn.setOnAction(e -> {
       if(showPasswordBtn.getText().equals("Hide Password")){
@@ -85,10 +93,32 @@ public class LoginController {
       String username = username_input.getText();
       String password = password_input.getText();
 
-      SceneManager.getInstance().navigateTo(SceneType.ADMIN_DASH);
+      setVisible(errorLbl, false);
+
+      if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
+        setVisible(errorLbl, true);
+        return;
+      }
+
+      if (db.authenticateUser(username, password)) {
+        setVisible(errorLbl, true);
+
+        String role = db.getUserRole(username);
+        switch (role) {
+          case "ADMIN" -> SceneManager.getInstance().navigateTo(SceneType.ADMIN_DASH);
+          case "STUDENT" -> SceneManager.getInstance().navigateTo(SceneType.STDNT_DASH);
+          case "TEACHER" -> SceneManager.getInstance().navigateTo(SceneType.PROF_DASH);
+        }
+
+
+      } else {
+        setVisible(errorLbl, true);
+      }
     });
 
     sign_up.setOnAction(e -> SceneManager.getInstance().navigateTo(SceneType.SIGNUP, true));
+
+    admin_test.setOnAction(e -> SceneManager.getInstance().navigateTo(SceneType.ADMIN_DASH));
 
 
     VBox root1 = new VBox(12,
@@ -99,7 +129,9 @@ public class LoginController {
         showPasswordBtn,
         passwordErrorLabel,
         revealedPassword,
-        buttonsBox
+        buttonsBox,
+            admin_test,
+            errorLbl
     );
     root1.setPadding(new Insets(30));
     root1.setAlignment(Pos.CENTER);

@@ -436,6 +436,19 @@ public class DatabaseManager {
         return userInfo;
     }
 
+    public boolean authenticateUser(String username, String password) {
+        String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            return stmt.executeQuery().next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public List<String> getAllUsers() {
         List<String> list = new ArrayList<>();
         String sql = "SELECT user_id, username, password, role FROM users ORDER BY user_id";
