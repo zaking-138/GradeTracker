@@ -74,6 +74,7 @@ public class LoginController {
     Button showPasswordBtn = new Button("Show Password");
 
     Label errorLbl = new Label();
+    errorLbl.setStyle("-fx-text-fill: red;");
 
     showPasswordBtn.setOnAction(e -> {
       if(showPasswordBtn.getText().equals("Hide Password")){
@@ -93,9 +94,11 @@ public class LoginController {
       String username = username_input.getText();
       String password = password_input.getText();
 
+      errorLbl.setText("");
       setVisible(errorLbl, false);
 
       if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
+        errorLbl.setText("Please fill in all fields.");
         setVisible(errorLbl, true);
         return;
       }
@@ -112,6 +115,7 @@ public class LoginController {
 
 
       } else {
+        errorLbl.setText("Invalid username or password.");
         setVisible(errorLbl, true);
       }
     });
@@ -126,12 +130,12 @@ public class LoginController {
         usernameHBox,
         usernameErrorLabel,
         passwordHBox,
+        errorLbl,
         showPasswordBtn,
         passwordErrorLabel,
         revealedPassword,
         buttonsBox,
-            admin_test,
-            errorLbl
+        admin_test
     );
     root1.setPadding(new Insets(30));
     root1.setAlignment(Pos.CENTER);

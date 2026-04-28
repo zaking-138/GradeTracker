@@ -136,6 +136,8 @@ public class SignUpController {
                 setVisible(passwordMessageBox, true);
                 return;
             }
+
+
             passwordErrorLabel.setText("Added user: " + grabUsername + "\npw:" + grabPassword + "\t" + confPassword + "\nrole:" + roleSelection);
             setVisible(passwordErrorLabel, true);
             setVisible(passwordMessageBox, true);
