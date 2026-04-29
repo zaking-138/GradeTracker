@@ -75,6 +75,7 @@ public class LoginController {
 
     Label errorLbl = new Label();
     errorLbl.setStyle("-fx-text-fill: red;");
+    setVisible(errorLbl, false);
 
     showPasswordBtn.setOnAction(e -> {
       if(showPasswordBtn.getText().equals("Hide Password")){
@@ -103,16 +104,16 @@ public class LoginController {
         return;
       }
 
-      if (db.authenticateUser(username, password)) {
-        setVisible(errorLbl, true);
+      if (db.authenticateUser(username, password) ) {
 
         String role = db.getUserRole(username);
+        System.out.println((String) role);
         switch (role) {
           case "ADMIN" -> SceneManager.getInstance().navigateTo(SceneType.ADMIN_DASH);
           case "STUDENT" -> SceneManager.getInstance().navigateTo(SceneType.STDNT_DASH);
           case "TEACHER" -> SceneManager.getInstance().navigateTo(SceneType.PROF_DASH);
+          default -> SceneManager.getInstance().navigateTo(SceneType.LOGIN);
         }
-
 
       } else {
         errorLbl.setText("Invalid username or password.");

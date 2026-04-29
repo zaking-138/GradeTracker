@@ -24,6 +24,8 @@ import javafx.stage.Stage;
 import tools.SceneManager;
 import tools.SceneType;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 /**
  * [Brief one-sentence desciption of what this class does.]
  *
@@ -142,7 +144,8 @@ public class SignUpController {
             setVisible(passwordErrorLabel, true);
             setVisible(passwordMessageBox, true);
 
-            DatabaseManager.getInstance().insertUser(grabUsername, grabPassword, roleSelection.toUpperCase());
+            String hashedPassword = BCrypt.hashpw(grabPassword, BCrypt.gensalt());
+            DatabaseManager.getInstance().insertUser(grabUsername, hashedPassword, roleSelection.toUpperCase());
         });
 
         login.setOnAction(e -> SceneManager.getInstance().navigateTo(SceneType.LOGIN, true));
