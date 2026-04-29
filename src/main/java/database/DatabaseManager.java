@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  * Manages the SQLite connection and all CRUD operations for the items table.
@@ -280,9 +281,10 @@ public class DatabaseManager {
             }else{
                 pstmt.setString(1, oldInfo.get("username"));
             }
-            if(!password.isEmpty()){
-                pstmt.setString(2, password);
-            }else{
+            if (!password.isEmpty()) {
+                String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+                pstmt.setString(2, hashedPassword);
+            } else {
                 pstmt.setString(2, oldInfo.get("password"));
             }
             if(!role.isEmpty()){
@@ -434,6 +436,25 @@ public class DatabaseManager {
             System.out.println("getAllStudents failed: " + e.getMessage());
         }
         return userInfo;
+    }
+
+    public boolean authenticateUser(String username, String plainPassword) {
+        String sql = "SELECT password FROM users WHERE username = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                String storedHashedPassword = rs.getString("password");
+                return BCrypt.checkpw(plainPassword, storedHashedPassword);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     public List<String> getAllUsers() {
