@@ -2,6 +2,8 @@ package database;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.sql.*;
 import java.util.ArrayList;
@@ -344,11 +346,11 @@ public class DatabaseManager {
         return list;
     }
 
-    public List<String> getCoursesByTeacher(int teacherId) {
+    public List<String> getCoursesByTeacher(int teacher_id) {
         List<String> list = new ArrayList<>();
         String sql = "SELECT course_code, course_name FROM courses WHERE teacher_id = ? ORDER BY course_code";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, teacherId);
+            pstmt.setInt(1, teacher_id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 String row = rs.getString("course_code") + " - " + rs.getString("course_name");
@@ -360,11 +362,11 @@ public class DatabaseManager {
         return list;
     }
 
-    public List<String> getAssignmentsByCourse(int courseId) {
+    public List<String> getAssignmentsByCourse(int course_id) {
         List<String> list = new ArrayList<>();
         String sql = " SELECT title, due_date, max_points FROM assignments WHERE course_id = ? ORDER BY due_date ";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, courseId);
+            pstmt.setInt(1, course_id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 String row = rs.getString("title") + " | Due: " + rs.getString("due_date") + " | Max Points: " + rs.getDouble("max_points");
@@ -376,11 +378,11 @@ public class DatabaseManager {
         return list;
     }
 
-    public List<String> getGradesForStudent(int studentId) {
+    public List<String> getGradesForStudent(int student_id) {
         List<String> list = new ArrayList<>();
         String sql = "SELECT assignments.title, grades.score, grades.feedback FROM grades JOIN assignments ON grades.assignment_id = assignments.assignment_id WHERE grades.student_id = ? ORDER BY assignments.title";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, studentId);
+            pstmt.setInt(1, student_id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 String row = rs.getString("title") + " | Score: " + rs.getDouble("score") + " | Feedback: " + rs.getString("feedback");
@@ -392,11 +394,11 @@ public class DatabaseManager {
         return list;
     }
 
-    public List<String> getGradesForAssignment(int assignmentId) {
+    public List<String> getGradesForAssignment(int assignment_id) {
         List<String> list = new ArrayList<>();
         String sql = "SELECT users.username, grades.score, grades.feedback FROM grades JOIN users ON grades.student_id = users.user_id WHERE grades.assignment_id = ? ORDER BY users.username";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, assignmentId);
+            pstmt.setInt(1, assignment_id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 String row = rs.getString("username") + " | Score: " + rs.getDouble("score") + " | Feedback: " + rs.getString("feedback");
@@ -419,6 +421,77 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             System.out.println("getAllStudents failed: " + e.getMessage());
+        }
+        return list;
+    }
+
+    public ObservableList<String> getCoursesByTeacherObservable(int teacher_id){
+        ObservableList<String> list = FXCollections.observableArrayList();
+        String sql = "SELECT course_code, course_name FROM courses WHERE teacher_id = ? ORDER BY course_code";
+        try(PreparedStatement psmt = connection.prepareStatement(sql)){
+            psmt.setInt(1, teacher_id);
+            ResultSet rs = psmt.executeQuery();
+            while (rs.next()) {
+                String row = rs.getString("course_code") + " - " + rs.getString("course_name");
+                list.add(row);
+            }
+        }catch (SQLException e){
+            System.out.println("getCoursesByTeacher failed: " + e.getMessage());
+        }
+        return list;
+    }
+
+    public ObservableList<String> getAssignmentsByCourseObservable(int course_id){
+        ObservableList<String> list = FXCollections.observableArrayList();
+        String sql = "SELECT title, description, max_points, due_date FROM assignments WHERE course_id = ? ORDER BY due_date";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)){
+            pstmt.setInt(1, course_id);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                String row = rs.getString("title") +
+                        " | Description: " + rs.getString("description") +
+                        " | Max Points: " + rs.getDouble("max_points") +
+                        " | Due: " + rs.getDate("due_date");
+                list.add(row);
+            }
+        }catch (SQLException e){
+            System.out.println("getAssignmentsByCourse failed: " + e.getMessage());
+        }
+        return list;
+    }
+
+    public ObservableList<String> getGradesByStudentObservable(int student_id){
+        ObservableList<String> list = FXCollections.observableArrayList();
+        String sql = "SELECT assignments.title, grades.score, grades.feedback FROM grades JOIN assignments ON grades.assignment_id = assignments.assignment_id WHERE grades.student_id = ? ORDER BY assignments.due_date";
+        try(PreparedStatement psmt = connection.prepareStatement(sql)){
+            psmt.setInt(1, student_id);
+            ResultSet rs = psmt.executeQuery();
+            while (rs.next()) {
+                String row = rs.getString("title") +
+                        " | Score: " + rs.getDouble("score") + " | Feedback: " +
+                        rs.getString("feedback");
+                list.add(row);
+            }
+        }catch (SQLException e){
+            System.out.println("getAssignmentsByStudent failed: " + e.getMessage());
+        }
+        return list;
+    }
+
+    public ObservableList<String> getGradesByAssignmentObservable(int assignment_id){
+        ObservableList<String> list = FXCollections.observableArrayList();
+        String sql = "SELECT users.username, grades.score, grades.feedback FROM grades JOIN users ON grades.student_id = users.user_id WHERE grades.assignment_id = ? ORDER BY users.username";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)){
+            pstmt.setInt(1, assignment_id);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                String row = rs.getString("username") +
+                        " | Score: " + rs.getDouble("score") + " | Feedback: " +
+                        rs.getString("feedback");
+                list.add(row);
+            }
+        }catch (SQLException e){
+            System.out.println("getAssignmentsByAssignment failed: " + e.getMessage());
         }
         return list;
     }
