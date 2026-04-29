@@ -2,6 +2,8 @@ package database;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.sql.*;
 import java.util.ArrayList;
@@ -417,6 +419,41 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             System.out.println("getAllStudents failed: " + e.getMessage());
+        }
+        return list;
+    }
+
+    public ObservableList<String> getCoursesByTeacherObservable(int teacher_id){
+        ObservableList<String> list = FXCollections.observableArrayList();
+        String sql = "SELECT course_code, course_name FROM courses WHERE teacher_id = ? ORDER BY course_code";
+        try(PreparedStatement psmt = connection.prepareStatement(sql)){
+            psmt.setInt(1, teacher_id);
+            ResultSet rs = psmt.executeQuery();
+            while (rs.next()) {
+                String row = rs.getString("course_code") + " - " + rs.getString("course_name");
+                list.add(row);
+            }
+        }catch (SQLException e){
+            System.out.println("getCoursesByTeacher failed: " + e.getMessage());
+        }
+        return list;
+    }
+
+    public ObservableList<String> getAssignmentsByCourseObservable(int course_id){
+        ObservableList<String> list = FXCollections.observableArrayList();
+        String sql = "SELECT title, description, max_points, due_date FROM assignments WHERE course_id = ? ORDER BY due_date";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)){
+            pstmt.setInt(1, course_id);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                String row = rs.getString("title") +
+                        " | Description: " + rs.getString("description") +
+                        " | Max Points: " + rs.getDouble("max_points") +
+                        " | Due: " + rs.getDate("due_date");
+                list.add(row);
+            }
+        }catch (SQLException e){
+            System.out.println("getAssignmentsByCourse failed: " + e.getMessage());
         }
         return list;
     }
