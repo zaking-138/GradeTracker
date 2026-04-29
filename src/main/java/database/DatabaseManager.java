@@ -491,6 +491,7 @@ public class DatabaseManager {
         }catch (SQLException e){
             System.out.println("getAssignmentsByAssignment failed: " + e.getMessage());
         }
+        return list;
     }
 
     public Map<String, String> getUser(int user_id) {
