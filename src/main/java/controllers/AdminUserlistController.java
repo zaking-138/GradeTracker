@@ -26,6 +26,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import tools.SceneManager;
 import tools.SceneType;
+import tools.UserListRepository;
 import users.User;
 
 /**
@@ -139,11 +140,18 @@ public class AdminUserlistController {
 
     public static Scene adminUserlistBuild(Stage stage) {
       DatabaseManager db = DatabaseManager.getInstance();
+      UserListRepository repo = UserListRepository.getInstance();
 
       Label title = new Label("Displaying all users...");
       title.setStyle("-fx-font-size: 18px;");
 
       ListView<String> listView = new ListView<>();
+      repo.addObserver(userList -> {
+        listView.getItems().setAll(TOP_ROW);
+        listView.getItems().addAll(makeList());
+      });
+      repo.refresh();
+
 
       TextField inputField = new TextField();
       ObservableList<String> fieldOptions = FXCollections.observableArrayList(
@@ -166,8 +174,8 @@ public class AdminUserlistController {
       Label noSelectionErrorLbl = new Label(errorList.get("no_selection"));
 //    Button addBtn  = new Button("Add");
       listView.setStyle("-fx-font-family: monospace; -fx-font-weight: bold");
-      listView.getItems().setAll(TOP_ROW);
-      listView.getItems().addAll(makeList());
+//      listView.getItems().setAll(TOP_ROW);
+//      listView.getItems().addAll(makeList());
 
       listView.setOnMouseClicked(e -> {
         noSelectionErrorLbl.setText(" ");
@@ -210,8 +218,9 @@ public class AdminUserlistController {
             grabField.equals("Password") ? grabNewValue : "",
             grabField.equals("Role") ? grabNewValue : ""
         );
-        listView.getItems().setAll(TOP_ROW);
-        listView.getItems().addAll(makeList());
+        repo.refresh();
+//        listView.getItems().setAll(TOP_ROW);
+//        listView.getItems().addAll(makeList());
       });
 
       backBtn.setOnAction(e -> {
@@ -223,8 +232,9 @@ public class AdminUserlistController {
         SceneManager.getInstance().navigateToCopy(SceneType.SIGNUP_POPUP, popup);
         popup.setAlwaysOnTop(true);
         popup.setOnCloseRequest(e1 -> {
-          listView.getItems().setAll(TOP_ROW);
-          listView.getItems().addAll(makeList());
+          repo.refresh();
+//          listView.getItems().setAll(TOP_ROW);
+//          listView.getItems().addAll(makeList());
         });
         popup.show();
       });

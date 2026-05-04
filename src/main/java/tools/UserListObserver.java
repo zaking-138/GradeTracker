@@ -1,4 +1,8 @@
 package tools;
+
+import java.util.List;
+import users.User;
+
 /**
  * @author Adam Vartan
  * <br>
@@ -6,5 +10,5 @@ package tools;
  * @since 0.1.0
  */
 public interface UserListObserver {
-    void refresh();
+    void onUsersChanged(List<User> todos);
 }
