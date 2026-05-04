@@ -62,7 +62,7 @@ public class StudentDashboardController {
     gradesTab.setClosable(false);
 
     ListView<String> coursesList = new ListView<>();
-    coursesList.setItems(db.getAllCoursesObservable());
+    coursesList.setItems(db.getAllCoursesByStudentObservable(studentId));
     if (coursesList.getItems().isEmpty()) {
       coursesList.getItems().add("No courses available.");
     }

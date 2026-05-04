@@ -533,6 +533,35 @@ public class DatabaseManager {
         return list;
     }
 
+    public ObservableList<String> getAllCoursesByStudentObservable(int studentId) {
+        ObservableList<String> list = FXCollections.observableArrayList();
+
+        String sql = """
+        SELECT DISTINCT c.course_id, c.course_code, c.course_name
+        FROM courses c
+        JOIN assignments a ON c.course_id = a.course_id
+        JOIN grades g ON a.assignment_id = g.assignment_id
+        WHERE g.student_id = ?
+        ORDER BY c.course_code
+        """;
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, studentId);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                String row = rs.getInt("course_id") + " | "
+                        + rs.getString("course_code") + " - "
+                        + rs.getString("course_name");
+                list.add(row);
+            }
+        } catch (SQLException e) {
+            System.out.println("getAllCoursesByStudentObservable failed: " + e.getMessage());
+        }
+
+        return list;
+    }
+
     public Map<String, String> getUser(int user_id) {
         Map<String, String> userInfo = new HashMap<>();
         String sql = "SELECT username, password, role FROM users WHERE user_id = ?";

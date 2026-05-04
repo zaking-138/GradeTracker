@@ -3,13 +3,20 @@ package controllers;
 import database.DatabaseManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import tools.SceneManager;
+import tools.SceneType;
+import tools.Session;
 
+import static tools.Helpers.getScene;
 import static tools.Helpers.setVisible;
 
 /**
@@ -32,38 +39,31 @@ public class StudentGradebookController {
 
   public static Scene stdntGrdBkBuild(Stage stage) {
     DatabaseManager db = DatabaseManager.getInstance();
+    int studentId = Session.getCurrentUserId();
 
-    Label title = new Label("Displaying your grade book...");
-    title.setStyle("-fx-font-size: 18px;");
+    BorderPane borderPane = new BorderPane();
 
-    ListView<String> listView = new ListView<>();
+    Label title = new Label("Student Gradebook");
+    title.setStyle("-fx-font-size: 22px; -fx-font-weight: bold");
 
-    TextField inputField = new TextField();
-    ObservableList<String> fieldOptions = FXCollections.observableArrayList(
-            "Class",
-            "Grade",
-            "Professor"
-    );
-    ComboBox<String> fieldSelection = new ComboBox<>(fieldOptions);
-    HBox editRow = new HBox(8);
-    editRow.setAlignment(Pos.CENTER);
-    HBox.setHgrow(inputField, Priority.ALWAYS);
-    editRow.getChildren().addAll(new Label("Select field: "),
-            fieldSelection, new Label("New Value: "), inputField);
-    setVisible(editRow, false);
+    ListView<String> gradesList = new ListView<>();
+    if (studentId == -1) {
+      gradesList.setItems(db.getGradesByStudentObservable(studentId));
+    }
+    if (gradesList.getItems().isEmpty()) {
+      gradesList.getItems().add("No grades available");
+    }
 
-    Button editUserBtn = new Button("Edit");
-    Button removeUserBtn = new Button("Remove");
-    Button addUserBtn = new Button("Add User");
+    Button backButton = new Button("Back to Dashboard");
+    backButton.setOnAction(e -> {
+      SceneManager.getInstance().navigateTo(SceneType.STDNT_DASH);
+    });
 
-    Label noSelectionErrorLbl = new Label();
-    setVisible(noSelectionErrorLbl, false);
-    noSelectionErrorLbl.setText("Select a valid grade entry.");
-    setVisible(noSelectionErrorLbl, true);
-    listView.getItems().add("Class\t\tGrade\t\tProfessor");
+    VBox content = new VBox(12, title, gradesList, backButton);
+    content.setPadding(new Insets(16));
 
-
-    return null;
+    borderPane.setCenter(content);
+    return getScene(borderPane);
   }
 
 }
