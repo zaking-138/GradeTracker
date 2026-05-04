@@ -6,11 +6,13 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.geometry.Insets;
+import tools.SceneManager;
+import tools.SceneType;
 
-import static tools.Helpers.setVisible;
+import static tools.Helpers.*;
 
 /**
  * @author Adam Vartan
@@ -31,38 +33,44 @@ public class ProfessorDashboardController {
   }
 
   public static Scene profDashBuild(Stage stage) {
-    DatabaseManager db = DatabaseManager.getInstance();
+    BorderPane base = new BorderPane();
 
-    Label title = new Label("Displaying your students...");
+    Button logoutBtn = new Button("Logout");
+    logoutBtn.setOnAction(e -> {
+      SceneManager.getInstance().navigateTo(SceneType.LOGIN, true);
+    });
+
+    Label title = new Label("Welcome, Professor!");
     title.setStyle("-fx-font-size: 18px;");
 
-    ListView<String> listView = new ListView<>();
+    Label userListBtnLbl = new Label("Open student list: ");
+    Button userListBtn = new Button("Student list");
+    userListBtn.setOnAction(e -> {
+      SceneManager.getInstance().navigateTo(SceneType.PROF_USERLIST, true);
+    });
 
-    TextField inputField = new TextField();
-    ObservableList<String> fieldOptions = FXCollections.observableArrayList(
-            "ID",
-            "Username",
-            "User_ID"
-    );
-    ComboBox<String> fieldSelection = new ComboBox<>(fieldOptions);
-    HBox editRow = new HBox(8);
-    editRow.setAlignment(Pos.CENTER);
-    HBox.setHgrow(inputField, Priority.ALWAYS);
-    editRow.getChildren().addAll(new Label("Select field: "),
-            fieldSelection, new Label("New Value: "), inputField);
-    setVisible(editRow, false);
+    Label gradeListBtnLbl = new Label("Open grade book: ");
+    Button gradeListBtn = new Button("Grade book");
+    gradeListBtn.setOnAction(e -> {
+      SceneManager.getInstance().navigateTo(SceneType.PROF_GRDBK, true);
+    });
 
-    Button editUserBtn = new Button("Edit");
-    Button removeUserBtn = new Button("Remove");
-    Button addUserBtn = new Button("Add User");
 
-    Label noSelectionErrorLbl = new Label();
-    setVisible(noSelectionErrorLbl, false);
-    noSelectionErrorLbl.setText("Select a valid grade entry.");
-    setVisible(noSelectionErrorLbl, true);
-    listView.getItems().add("ID\t\tUsername\t\tUser_ID");
+    HBox hbox01 = new HBox();
+    hbox01.getChildren().addAll(userListBtnLbl, userListBtn, gradeListBtnLbl, gradeListBtn);
+    hbox01.setAlignment(Pos.CENTER);
 
-    return null;
+    VBox vbox01 = new VBox();
+    Pane vBoxSpacer = new Pane();
+    VBox.setVgrow(vBoxSpacer, Priority.ALWAYS);
+    vbox01.getChildren().addAll(title, hbox01);
+    vbox01.setAlignment(Pos.CENTER);
+
+    base.setCenter(vbox01);
+    base.setBottom(logoutBtn);
+    BorderPane.setMargin(logoutBtn, new Insets(16));
+
+    return getScene(base);
   }
 
 }
