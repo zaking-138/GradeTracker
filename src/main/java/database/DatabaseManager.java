@@ -500,6 +500,39 @@ public class DatabaseManager {
         return list;
     }
 
+    public int getUserIDByUsername(String username) {
+        String sql = "SELECT user_id FROM users WHERE username = ?";
+        try(PreparedStatement pstmt = connection.prepareStatement(sql)){
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("user_id");
+            }
+        }
+        catch(SQLException e){
+            System.out.println("getUserIDByUsername failed: " + e.getMessage());
+        }
+        return -1;
+    }
+
+    public ObservableList<String> getAllCoursesObservable(){
+        ObservableList<String> list = FXCollections.observableArrayList();
+        String sql = "SELECT course_id, course_code,  course_name FROM courses ORDER BY course_code";
+        try(PreparedStatement pstmt = connection.prepareStatement(sql)){
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                String row = rs.getInt("course_id") + " | " +
+                        rs.getString("course_code") + " | " +
+                        rs.getString("course_name");
+                list.add(row);
+            }
+        }
+        catch (SQLException e){
+            System.out.println("getAllCoursesObservable failed: " + e.getMessage());
+        }
+        return list;
+    }
+
     public Map<String, String> getUser(int user_id) {
         Map<String, String> userInfo = new HashMap<>();
         String sql = "SELECT username, password, role FROM users WHERE user_id = ?";
