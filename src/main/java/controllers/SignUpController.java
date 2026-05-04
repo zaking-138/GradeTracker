@@ -56,12 +56,14 @@ public class SignUpController {
         username_input.setMaxWidth(500);
         HBox usernameHBox = new HBox(8, username_label, username_input);
         usernameHBox.setAlignment(Pos.CENTER);
+        username_input.setId("usernameField");
 
         PasswordField password_input = new PasswordField();
         password_input.setPromptText("Password");
         password_input.setMaxWidth(500);
         HBox passwordHBox = new HBox(8, password_label, password_input);
         passwordHBox.setAlignment(Pos.CENTER);
+        password_input.setId("passwordField");
 
         PasswordField confirmPassword = new PasswordField();
         confirmPassword.setPromptText("Confirm Password...");
@@ -73,6 +75,7 @@ public class SignUpController {
         Label confPasswordLbl = new Label("Retype Password: ");
         HBox confPasswordHBox = new HBox(confPasswordLbl, confirmPassword);
         confPasswordHBox.setAlignment(Pos.CENTER);
+        confirmPassword.setId("confirmPasswordField");
 
         ObservableList<String> roleOptions = FXCollections.observableArrayList(
             "Student",
@@ -83,11 +86,13 @@ public class SignUpController {
         comboBoxRoles.setMaxWidth(500);
         HBox roleSelectHBox = new HBox(new Label("Role: "), comboBoxRoles);
         roleSelectHBox.setAlignment(Pos.CENTER);
+        comboBoxRoles.setId("rolesButton");
 
         username_input.setPromptText("Username");
         password_input.setPromptText("Password");
 
         Button sign_up = new Button("SIGN UP");
+        sign_up.setId("signUpButton");
         Button login = new Button("LOGIN");
         HBox buttonsBox = new HBox(8, sign_up, login);
         buttonsBox.setAlignment(Pos.CENTER);
@@ -146,6 +151,13 @@ public class SignUpController {
 
             String hashedPassword = BCrypt.hashpw(grabPassword, BCrypt.gensalt());
             DatabaseManager.getInstance().insertUser(grabUsername, hashedPassword, roleSelection.toUpperCase());
+
+            switch (roleSelection) {
+                case "Admin" -> SceneManager.getInstance().navigateTo(SceneType.ADMIN_DASH);
+                case "Student" -> SceneManager.getInstance().navigateTo(SceneType.STDNT_DASH, true);
+                case "Teacher" -> SceneManager.getInstance().navigateTo(SceneType.PROF_DASH);
+                default -> SceneManager.getInstance().navigateTo(SceneType.SIGNUP);
+            }
         });
 
         login.setOnAction(e -> SceneManager.getInstance().navigateTo(SceneType.LOGIN, true));

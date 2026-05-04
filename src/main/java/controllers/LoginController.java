@@ -67,6 +67,7 @@ public class LoginController {
 
     Button admin_test = new Button("ADMIN LOGIN");
     Button sign_up = new Button("SIGN UP");
+    sign_up.setId("signUpButton");
     Button login = new Button("LOGIN");
     login.setId("loginButton");
     HBox buttonsBox = new HBox(8, sign_up, login);
