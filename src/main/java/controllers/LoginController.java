@@ -1,5 +1,6 @@
 package controllers;
 
+import static database.DatabaseManager.setCurrentUser;
 import static tools.Helpers.*;
 
 import java.util.ArrayList;
@@ -34,6 +35,8 @@ import javax.xml.crypto.Data;
  */
 public class LoginController {
   public static Scene loginBuild(Stage stage) {
+    setCurrentUser(null);
+
     DatabaseManager db = DatabaseManager.getInstance();
     BorderPane base = new BorderPane();
     Label header = new Label("Sign In:");
@@ -105,7 +108,7 @@ public class LoginController {
       }
 
       if (db.authenticateUser(username, password) ) {
-
+        setCurrentUser(username);
         String role = db.getUserRole(username);
         System.out.println((String) role);
         switch (role) {
@@ -135,8 +138,8 @@ public class LoginController {
         showPasswordBtn,
         passwordErrorLabel,
         revealedPassword,
-        buttonsBox,
-        admin_test
+        buttonsBox
+//        ,admin_test
     );
     root1.setPadding(new Insets(30));
     root1.setAlignment(Pos.CENTER);

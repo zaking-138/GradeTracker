@@ -1,5 +1,6 @@
 package controllers;
 
+import static database.DatabaseManager.getCurrentUser;
 import static tools.Helpers.getScene;
 import static tools.Helpers.getScreenSize;
 
@@ -32,7 +33,7 @@ public class AdminDashboardController {
       SceneManager.getInstance().navigateTo(SceneType.LOGIN, true);
     });
 
-    Label welcomeLbl = new Label("Welcome, {admin name}!");
+    Label welcomeLbl = new Label("Welcome, " + getCurrentUser() + "!");
 
     Label userListBtnLbl = new Label("Open full userlist: ");
     Button userListBtn = new Button("Userlist");
