@@ -24,8 +24,6 @@ import tools.SceneManager;
 import tools.SceneType;
 import database.DatabaseManager;
 
-import javax.xml.crypto.Data;
-
 /**
  * @author Sebastien Wu
  * <br>
@@ -58,20 +56,24 @@ public class LoginController {
     username_input.setMaxWidth(500);
     HBox usernameHBox = new HBox(8, username_label, username_input);
     usernameHBox.setAlignment(Pos.CENTER);
+    username_input.setId("usernameField");
 
     PasswordField password_input = new PasswordField();
     password_input.setPromptText("Password");
     password_input.setMaxWidth(500);
     HBox passwordHBox = new HBox(8, password_label, password_input);
     passwordHBox.setAlignment(Pos.CENTER);
+    password_input.setId("passwordField");
 
     Button admin_test = new Button("ADMIN LOGIN");
     Button sign_up = new Button("SIGN UP");
     Button login = new Button("LOGIN");
+    login.setId("loginButton");
     HBox buttonsBox = new HBox(8, sign_up, login);
     buttonsBox.setAlignment(Pos.CENTER);
 
     Button showPasswordBtn = new Button("Show Password");
+    showPasswordBtn.setId("showPasswordButton");
 
     Label errorLbl = new Label();
     errorLbl.setStyle("-fx-text-fill: red;");
