@@ -34,7 +34,7 @@ import org.mindrot.jbcrypt.BCrypt;
  * @since 22/04/2026
  */
 public class SignUpController {
-    public static Parent doBuild(){
+    public static Parent doBuild(boolean hideLogin){
         BorderPane base = new BorderPane();
         Label header = new Label("Sign Up:");
         Label username_label = new Label("Username: ");
@@ -188,15 +188,18 @@ public class SignUpController {
                 }
             });
         }
-
+        if(hideLogin){
+            header.setText("Add user:");
+            setVisible(login, false);
+        }
         return root1;
     }
 
     public static Scene signUpBuild(Stage stage) {
-        return getScene(doBuild());
+        return getScene(doBuild(false));
     }
 
     public static Scene signUpPopup(Stage stage) {
-        return getScene(doBuild(), 0.50);
+        return getScene(doBuild(true), 0.30);
     }
 }
