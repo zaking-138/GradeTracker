@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import database.DatabaseManager;
+import users.User;
+
 /**
  * @author Adam Vartan
  * <br>
@@ -12,7 +14,15 @@ import database.DatabaseManager;
 
 public class UserListRepository {
     private final DatabaseManager db = DatabaseManager.getInstance();
+    private static UserListRepository instance;
     private final List<UserListObserver> observers = new ArrayList<>();
+
+    public static UserListRepository getInstance() {
+        if (instance == null) {
+            instance = new UserListRepository();
+        }
+        return instance;
+    }
 
     public void addObserver(UserListObserver observer) {
         observers.add(observer);
@@ -23,9 +33,14 @@ public class UserListRepository {
     }
 
     private void notifyObservers() {
-        for(UserListObserver o : observers) {
-            o.refresh();
+        List<User> current = db.getAllUsers(true);
+        for (UserListObserver o : observers) {
+            o.onUsersChanged(current);
         }
+    }
+
+    public void refresh() {
+        notifyObservers();
     }
 
     public void add(String title, String password, String role) {
