@@ -31,6 +31,15 @@ public class DatabaseManager {
     private static final String DB_URL = "jdbc:sqlite:grade_tracker.db";
     private Connection connection;
     private static DatabaseManager instance;
+    private static String currentUser = null;
+
+    public static String getCurrentUser() {
+        return currentUser;
+    }
+
+    public static void setCurrentUser(String currentUser) {
+        DatabaseManager.currentUser = currentUser;
+    }
 
     private DatabaseManager() {
         try {
