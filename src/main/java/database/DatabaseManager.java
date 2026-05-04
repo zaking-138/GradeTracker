@@ -569,7 +569,7 @@ public class DatabaseManager {
                             rs.getString("password")
                         ));
                         break;
-                    case "PROFESSOR":
+                    case "ADMIN":
                         list.add(new Admin(rs.getInt("user_id"),
                             rs.getString("username"),
                             rs.getString("password")

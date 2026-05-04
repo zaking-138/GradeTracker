@@ -36,19 +36,20 @@ import users.User;
  */
 public class AdminUserlistController {
 
-  private static int selectedUserId;
-  private static String selectedRow;
+  private static int selectedUserId = -1;
+  private static String selectedRow = null;
   private static final int MAX_LENGTH = 20;
+  private static final int SPACER_SPACE = MAX_LENGTH + 5;
 
   private static final String TOP_ROW = "ID" + makeSpacer("ID".length())
       + "Username" + makeSpacer("Username".length())
-      + "Role" + makeSpacer("Role".length())
-      + "Password";
+      + "Password" + makeSpacer("Password".length())
+      + "Role";
 
   public static String makeSpacer(int minusLength){
     int i = 0;
     StringBuilder temp = new StringBuilder();
-    while(i < MAX_LENGTH + 5 - minusLength){
+    while(i < SPACER_SPACE - minusLength){
       temp.append(" ");
       i++;
     }
@@ -131,6 +132,7 @@ public class AdminUserlistController {
     Button editUserBtn = new Button("Edit");
     Button removeUserBtn = new Button("Remove");
     Button addUserBtn = new Button("Add User");
+    Button backBtn = new Button("Back");
     Label noSelectionErrorLbl = new Label(errorList.get("no_selection"));
 //    Button addBtn  = new Button("Add");
     listView.setStyle("-fx-font-family: monospace; -fx-font-weight: bold");
@@ -142,26 +144,49 @@ public class AdminUserlistController {
       setVisible(noSelectionErrorLbl, false);
       String selectedItem = listView.getSelectionModel().getSelectedItem();
       if(selectedItem != null && !selectedItem.isEmpty()){
-        String temp = selectedItem.split("\t")[0];
-        if(temp.equals("ID")){
-          setSelectedUserId(0);
-         setSelectedRow(null);
+        try{
+          Integer.parseInt(String.valueOf(selectedItem.charAt(0)));
+        } catch (Exception ex) {
+          setSelectedUserId(-1);
+          setSelectedRow(null);
           inputField.setPromptText("ID - USERNAME - PASSWORD");
           return;
         }
-        setSelectedUserId( Integer.parseInt(temp) );
+        StringBuilder temp = new StringBuilder();
+        int i = 0;
+        while(true){
+          try{
+            temp.append(Integer.parseInt(
+                String.valueOf(selectedItem.charAt(i))
+            ));
+            i++;
+          } catch (NumberFormatException ex) {
+            break;
+          }
+        }
+        setSelectedUserId(Integer.parseInt(temp.toString()));
         setSelectedRow(selectedItem);
         System.out.println("Selected user: " + selectedUserId);
 
         inputField.setPromptText(selectedRow);
         setVisible(editRow, true);
+        return;
       }
+      setSelectedUserId(-1);
+      setSelectedRow(null);
+      inputField.setPromptText("ID - USERNAME - PASSWORD");
     });
 
-    Button backBtn = new Button("Back");
     editUserBtn.setOnAction(e -> {
       String grabField = fieldSelection.getValue();
       String grabNewValue = inputField.getText();
+      inputField.setText("");
+
+      if(selectedUserId == -1){
+        noSelectionErrorLbl.setText(errorList.get("no_selection"));
+        setVisible(noSelectionErrorLbl, true);
+        return;
+      }
 
       if(grabField == null){
         noSelectionErrorLbl.setText(errorList.get("no_field_selection"));
@@ -206,12 +231,12 @@ public class AdminUserlistController {
     Pane btnsRowSpacer01 = new Pane();
     HBox.setHgrow(btnsRowSpacer01, Priority.ALWAYS);
     setVisible(noSelectionErrorLbl, false);
-    btnsRow.getChildren().addAll(editUserBtn, btnsRowSpacer, addUserBtn, btnsRowSpacer01, removeUserBtn);
+    btnsRow.getChildren().addAll(editUserBtn, noSelectionErrorLbl, btnsRowSpacer, addUserBtn, btnsRowSpacer01, removeUserBtn);
 
 //    HBox.setHgrow(removeUserBtn, Priority.ALWAYS);
     Pane vBoxSpacer = new Pane();
     VBox.setVgrow(vBoxSpacer, Priority.ALWAYS);
-    VBox layout = new VBox(12, title, listView, editRow, btnsRow, noSelectionErrorLbl, vBoxSpacer, backBtn);
+    VBox layout = new VBox(12, title, listView, editRow, btnsRow, vBoxSpacer, backBtn);
     layout.setPadding(new Insets(16));
     return new Scene(layout, getScreenSize().get("w"), getScreenSize().get("h"));
   }
