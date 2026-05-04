@@ -56,188 +56,200 @@ public class AdminUserlistController {
     return temp.toString();
   }
 
-  public static List<String> makeList() {
-    List<String> list = new ArrayList<>();
-    var temp = DatabaseManager.getInstance().getAllUsers(true);
-    for(User u : temp){
-      StringBuilder tempStrBldr = new StringBuilder();
-      tempStrBldr.append(u.getUserId()).append(makeSpacer(String.valueOf(u.getUserId()).length()));
+    public static List<String> makeList() {
+      List<String> list = new ArrayList<>();
+      var temp = DatabaseManager.getInstance().getAllUsers(true);
+      for(User u : temp){
+        StringBuilder tempStrBldr = new StringBuilder();
+        tempStrBldr.append(u.getUserId()).append(makeSpacer(String.valueOf(u.getUserId()).length()));
 
-      int tempLength = MAX_LENGTH - u.getUsername().length();
-      if(tempLength < 0){
-        String tempStr = u.getUsername().substring(0, 18) + "...";
-        tempStrBldr.append(tempStr).append(makeSpacer(tempStr.length()));
-      }else{
-        tempStrBldr.append(u.getUsername());
-        tempStrBldr.append(makeSpacer(u.getUsername().length()));
+        int tempLength = MAX_LENGTH - u.getUsername().length();
+        if(tempLength < 0){
+          String tempStr = u.getUsername().substring(0, 18) + "...";
+          tempStrBldr.append(tempStr).append(makeSpacer(tempStr.length()));
+        }else{
+          tempStrBldr.append(u.getUsername());
+          tempStrBldr.append(makeSpacer(u.getUsername().length()));
+        }
+        tempLength = MAX_LENGTH - u.getPassword().length();
+        if(tempLength < 0){
+          String tempStr = u.getPassword().substring(0, 18) + "...";
+          tempStrBldr.append(tempStr).append(makeSpacer(tempStr.length()));
+        }else{
+          tempStrBldr.append(u.getPassword());
+          tempStrBldr.append(makeSpacer(u.getPassword().length()));
+        }
+        tempStrBldr.append(u.getRole());
+        //        System.out.println(tempString);
+        list.add(tempStrBldr.toString());
       }
-      tempLength = MAX_LENGTH - u.getPassword().length();
-      if(tempLength < 0){
-        String tempStr = u.getPassword().substring(0, 18) + "...";
-        tempStrBldr.append(tempStr).append(makeSpacer(tempStr.length()));
-      }else{
-        tempStrBldr.append(u.getPassword());
-        tempStrBldr.append(makeSpacer(u.getPassword().length()));
-      }
-      tempStrBldr.append(u.getRole());
-      //        System.out.println(tempString);
-      list.add(tempStrBldr.toString());
+      return list;
     }
-    return list;
-  }
 
-  /**
-   * "success", "no_selection", "no_field_selection", "no_entry", "invalid_username", "invalid_password", "invalid_role"
-   */
-  private static final Map<String, String> errorList = Map.of(
-          "success", "Entry edited!",
-      "no_selection", "Error: Select valid user from list!",
-      "no_field_selection", "Error: Select field to edit!",
-      "no_entry", "Error: New value cannot be empty!",
-      "invalid_username", "Error: New username is invalid!",
-      "invalid_password", "Error: New password is invalid!",
-      "invalid_role", "Error: New role is invalid!"
-  );
-
-  public static void setSelectedRow(String selectedRow) {
-    AdminUserlistController.selectedRow = selectedRow;
-  }
-
-  public static void setSelectedUserId(int selectedUserId) {
-    AdminUserlistController.selectedUserId = selectedUserId;
-  }
-
-  public static Scene adminUserlistBuild(Stage stage) {
-    DatabaseManager db = DatabaseManager.getInstance();
-
-    Label title = new Label("Displaying all users...");
-    title.setStyle("-fx-font-size: 18px;");
-
-    ListView<String> listView = new ListView<>();
-
-    TextField inputField = new TextField();
-    ObservableList<String> fieldOptions = FXCollections.observableArrayList(
-        "Username",
-        "Password",
-        "Role"
+    /**
+     * "success", "no_selection", "no_field_selection", "no_entry", "invalid_username", "invalid_password", "invalid_role"
+     */
+    private static final Map<String, String> errorList = Map.of(
+        "success", "Entry edited!",
+        "no_selection", "Error: Select valid user from list!",
+        "no_field_selection", "Error: Select field to edit!",
+        "no_entry", "Error: New value cannot be empty!",
+        "invalid_username", "Error: New username is invalid!",
+        "invalid_password", "Error: New password is invalid!",
+        "invalid_role", "Error: New role is invalid!"
     );
-    ComboBox<String> fieldSelection = new ComboBox<>(fieldOptions);
-    HBox editRow = new HBox(8);
-    editRow.setAlignment(Pos.CENTER);
-    HBox.setHgrow(inputField, Priority.ALWAYS);
-    editRow.getChildren().addAll(new Label("Select field: "),
-        fieldSelection, new Label("New Value: "), inputField);
-    setVisible(editRow, false);
 
-    Button editUserBtn = new Button("Edit");
-    Button removeUserBtn = new Button("Remove");
-    Button addUserBtn = new Button("Add User");
-    Button backBtn = new Button("Back");
-    Label noSelectionErrorLbl = new Label(errorList.get("no_selection"));
-//    Button addBtn  = new Button("Add");
-    listView.setStyle("-fx-font-family: monospace; -fx-font-weight: bold");
-    listView.getItems().setAll(TOP_ROW);
-    listView.getItems().addAll(makeList());
+    public static void setSelectedRow(String selectedRow) {
+      AdminUserlistController.selectedRow = selectedRow;
+    }
 
-    listView.setOnMouseClicked(e -> {
-      noSelectionErrorLbl.setText(" ");
-      setVisible(noSelectionErrorLbl, false);
-      String selectedItem = listView.getSelectionModel().getSelectedItem();
-      if(selectedItem != null && !selectedItem.isEmpty()){
-        try{
-          Integer.parseInt(String.valueOf(selectedItem.charAt(0)));
-        } catch (Exception ex) {
-          setSelectedUserId(-1);
-          setSelectedRow(null);
-          inputField.setPromptText("ID - USERNAME - PASSWORD");
-          return;
-        }
-        StringBuilder temp = new StringBuilder();
-        int i = 0;
-        while(true){
-          try{
-            temp.append(Integer.parseInt(
-                String.valueOf(selectedItem.charAt(i))
-            ));
-            i++;
-          } catch (NumberFormatException ex) {
-            break;
-          }
-        }
-        setSelectedUserId(Integer.parseInt(temp.toString()));
-        setSelectedRow(selectedItem);
-        System.out.println("Selected user: " + selectedUserId);
+    public static void setSelectedUserId(int selectedUserId) {
+      AdminUserlistController.selectedUserId = selectedUserId;
+    }
 
-        inputField.setPromptText(selectedRow);
-        setVisible(editRow, true);
-        return;
-      }
+  public static void grabUserID(String selectedItem, TextField inputField, HBox editRow){
+    try{
+      Integer.parseInt(String.valueOf(selectedItem.charAt(0)));
+    } catch (Exception ex) {
       setSelectedUserId(-1);
       setSelectedRow(null);
       inputField.setPromptText("ID - USERNAME - PASSWORD");
-    });
+      return;
+    }
+    StringBuilder temp = new StringBuilder();
+    int i = 0;
+    while(true){
+      try{
+        temp.append(Integer.parseInt(String.valueOf(selectedItem.charAt(i))));
+        i++;
+      } catch (NumberFormatException ex) { break; }
+    }
+    if(!temp.isEmpty()){
+      setSelectedUserId(Integer.parseInt(temp.toString()));
+      setSelectedRow(selectedItem);
+      System.out.println("Selected user: " + selectedUserId);
+      inputField.setPromptText(selectedRow);
+      setVisible(editRow, true);
+      return;
+    }
+    setSelectedUserId(-1);
+    setSelectedRow(null);
+    inputField.setPromptText("ID - USERNAME - PASSWORD");
+    }
 
-    editUserBtn.setOnAction(e -> {
-      String grabField = fieldSelection.getValue();
-      String grabNewValue = inputField.getText();
-      inputField.setText("");
+    public static Scene adminUserlistBuild(Stage stage) {
+      DatabaseManager db = DatabaseManager.getInstance();
 
-      if(selectedUserId == -1){
-        noSelectionErrorLbl.setText(errorList.get("no_selection"));
-        setVisible(noSelectionErrorLbl, true);
-        return;
-      }
+      Label title = new Label("Displaying all users...");
+      title.setStyle("-fx-font-size: 18px;");
 
-      if(grabField == null){
-        noSelectionErrorLbl.setText(errorList.get("no_field_selection"));
-        setVisible(noSelectionErrorLbl, true);
-        return;
-      }
+      ListView<String> listView = new ListView<>();
 
-      if(grabNewValue == null || grabNewValue.isEmpty()){
-        noSelectionErrorLbl.setText(errorList.get("no_entry"));
-        setVisible(noSelectionErrorLbl, true);
-        return;
-      }
-      noSelectionErrorLbl.setText(errorList.get("success"));
-      setVisible(noSelectionErrorLbl, true);
-      System.out.println(selectedUserId + ": " + grabField + " --> " + grabNewValue);
-      Map<String, String> userInfo = DatabaseManager.getInstance().getUser(selectedUserId);
-      System.out.println(userInfo.get("username") + " " + userInfo.get("password") + " " + userInfo.get("role"));
+      TextField inputField = new TextField();
+      ObservableList<String> fieldOptions = FXCollections.observableArrayList(
+          "Username",
+          "Password",
+          "Role"
+      );
+      ComboBox<String> fieldSelection = new ComboBox<>(fieldOptions);
+      HBox editRow = new HBox(8);
+      editRow.setAlignment(Pos.CENTER);
+      HBox.setHgrow(inputField, Priority.ALWAYS);
+      editRow.getChildren().addAll(new Label("Select field: "),
+          fieldSelection, new Label("New Value: "), inputField);
+      setVisible(editRow, false);
 
-      DatabaseManager.getInstance().updateUser(selectedUserId,
-          grabField.equals("Username") ? grabNewValue : "",
-          grabField.equals("Password") ? grabNewValue : "",
-          grabField.equals("Role") ? grabNewValue : ""
-          );
+      Button editUserBtn = new Button("Edit");
+      Button removeUserBtn = new Button("Remove");
+      Button addUserBtn = new Button("Add User");
+      Button backBtn = new Button("Back");
+      Label noSelectionErrorLbl = new Label(errorList.get("no_selection"));
+//    Button addBtn  = new Button("Add");
+      listView.setStyle("-fx-font-family: monospace; -fx-font-weight: bold");
       listView.getItems().setAll(TOP_ROW);
       listView.getItems().addAll(makeList());
-    });
 
-    backBtn.setOnAction(e -> {
-      SceneManager.getInstance().navigateTo(SceneType.ADMIN_DASH);
-    });
+      listView.setOnMouseClicked(e -> {
+        noSelectionErrorLbl.setText(" ");
+        setVisible(noSelectionErrorLbl, false);
+        String selectedItem = listView.getSelectionModel().getSelectedItem();
+        if(selectedItem != null && !selectedItem.isEmpty()){
+          grabUserID(selectedItem, inputField, editRow); }
+      });
 
-    addUserBtn.setOnAction(e -> {
-      Stage popup = new Stage();
-      SceneManager.getInstance().navigateToCopy(SceneType.SIGNUP_POPUP, popup);
-      popup.show();
-    });
+      editUserBtn.setOnAction(e -> {
+        String grabField = fieldSelection.getValue();
+        String grabNewValue = inputField.getText();
+        inputField.setText("");
 
-    HBox btnsRow = new HBox(8);
-    btnsRow.setAlignment(Pos.CENTER);
-    Pane btnsRowSpacer = new Pane();
-    HBox.setHgrow(btnsRowSpacer, Priority.ALWAYS);
-    Pane btnsRowSpacer01 = new Pane();
-    HBox.setHgrow(btnsRowSpacer01, Priority.ALWAYS);
-    setVisible(noSelectionErrorLbl, false);
-    btnsRow.getChildren().addAll(editUserBtn, noSelectionErrorLbl, btnsRowSpacer, addUserBtn, btnsRowSpacer01, removeUserBtn);
+        if(selectedUserId == -1){
+          noSelectionErrorLbl.setText(errorList.get("no_selection"));
+          setVisible(noSelectionErrorLbl, true);
+          return;
+        }
+
+        if(grabField == null){
+          noSelectionErrorLbl.setText(errorList.get("no_field_selection"));
+          setVisible(noSelectionErrorLbl, true);
+          return;
+        }
+
+        if(grabNewValue == null || grabNewValue.isEmpty()){
+          noSelectionErrorLbl.setText(errorList.get("no_entry"));
+          setVisible(noSelectionErrorLbl, true);
+          return;
+        }
+        noSelectionErrorLbl.setText(errorList.get("success"));
+        setVisible(noSelectionErrorLbl, true);
+        System.out.println(selectedUserId + ": " + grabField + " --> " + grabNewValue);
+        Map<String, String> userInfo = DatabaseManager.getInstance().getUser(selectedUserId);
+        System.out.println(userInfo.get("username") + " " + userInfo.get("password") + " " + userInfo.get("role"));
+
+        DatabaseManager.getInstance().updateUser(selectedUserId,
+            grabField.equals("Username") ? grabNewValue : "",
+            grabField.equals("Password") ? grabNewValue : "",
+            grabField.equals("Role") ? grabNewValue : ""
+        );
+        listView.getItems().setAll(TOP_ROW);
+        listView.getItems().addAll(makeList());
+      });
+
+      backBtn.setOnAction(e -> {
+        SceneManager.getInstance().navigateTo(SceneType.ADMIN_DASH);
+      });
+
+      addUserBtn.setOnAction(e -> {
+        Stage popup = new Stage();
+        SceneManager.getInstance().navigateToCopy(SceneType.SIGNUP_POPUP, popup);
+        popup.setAlwaysOnTop(true);
+        popup.setOnCloseRequest(e1 -> {
+          listView.getItems().setAll(TOP_ROW);
+          listView.getItems().addAll(makeList());
+        });
+        popup.show();
+      });
+
+      HBox btnsRow = new HBox(8);
+      btnsRow.setAlignment(Pos.CENTER);
+      Pane btnsRowSpacer = new Pane();
+      HBox.setHgrow(btnsRowSpacer, Priority.ALWAYS);
+      Pane btnsRowSpacer01 = new Pane();
+      HBox.setHgrow(btnsRowSpacer01, Priority.ALWAYS);
+      setVisible(noSelectionErrorLbl, false);
+      btnsRow.getChildren().addAll(editUserBtn, noSelectionErrorLbl, btnsRowSpacer, addUserBtn, btnsRowSpacer01, removeUserBtn);
 
 //    HBox.setHgrow(removeUserBtn, Priority.ALWAYS);
-    Pane vBoxSpacer = new Pane();
-    VBox.setVgrow(vBoxSpacer, Priority.ALWAYS);
-    VBox layout = new VBox(12, title, listView, editRow, btnsRow, vBoxSpacer, backBtn);
-    layout.setPadding(new Insets(16));
-    return new Scene(layout, getScreenSize().get("w"), getScreenSize().get("h"));
+      Pane vBoxSpacer = new Pane();
+      VBox.setVgrow(vBoxSpacer, Priority.ALWAYS);
+      VBox layout = new VBox(12, title, listView, editRow, btnsRow, vBoxSpacer, backBtn);
+      layout.setPadding(new Insets(16));
+      return new Scene(layout, getScreenSize().get("w"), getScreenSize().get("h"));
+    }
   }
-}
+
+
+
+
+
+
+
