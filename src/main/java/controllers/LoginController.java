@@ -1,7 +1,7 @@
 package controllers;
 
 import static tools.Helpers.*;
-
+import tools.Session;
 import java.util.ArrayList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -107,10 +107,12 @@ public class LoginController {
       if (db.authenticateUser(username, password) ) {
 
         String role = db.getUserRole(username);
+        int userId = db.getUserIDByUsername(username);
+        Session.setCurrentUser(userId, username, role);
         System.out.println((String) role);
         switch (role) {
           case "ADMIN" -> SceneManager.getInstance().navigateTo(SceneType.ADMIN_DASH);
-          case "STUDENT" -> SceneManager.getInstance().navigateTo(SceneType.STDNT_DASH);
+          case "STUDENT" -> SceneManager.getInstance().navigateTo(SceneType.STDNT_DASH, true);
           case "TEACHER" -> SceneManager.getInstance().navigateTo(SceneType.PROF_DASH);
           default -> SceneManager.getInstance().navigateTo(SceneType.LOGIN);
         }
