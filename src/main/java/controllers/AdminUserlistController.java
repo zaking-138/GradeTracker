@@ -3,7 +3,9 @@ package controllers;
 import static tools.Helpers.*;
 
 import database.DatabaseManager;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -23,6 +26,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import tools.SceneManager;
 import tools.SceneType;
+import users.User;
 
 /**
  * @author Zachary King
@@ -34,6 +38,52 @@ public class AdminUserlistController {
 
   private static int selectedUserId;
   private static String selectedRow;
+  private static final int MAX_LENGTH = 20;
+
+  private static final String TOP_ROW = "ID" + makeSpacer("ID".length())
+      + "Username" + makeSpacer("Username".length())
+      + "Role" + makeSpacer("Role".length())
+      + "Password";
+
+  public static String makeSpacer(int minusLength){
+    int i = 0;
+    StringBuilder temp = new StringBuilder();
+    while(i < MAX_LENGTH + 5 - minusLength){
+      temp.append(" ");
+      i++;
+    }
+    return temp.toString();
+  }
+
+  public static List<String> makeList() {
+    List<String> list = new ArrayList<>();
+    var temp = DatabaseManager.getInstance().getAllUsers(true);
+    for(User u : temp){
+      StringBuilder tempStrBldr = new StringBuilder();
+      tempStrBldr.append(u.getUserId()).append(makeSpacer(String.valueOf(u.getUserId()).length()));
+
+      int tempLength = MAX_LENGTH - u.getUsername().length();
+      if(tempLength < 0){
+        String tempStr = u.getUsername().substring(0, 18) + "...";
+        tempStrBldr.append(tempStr).append(makeSpacer(tempStr.length()));
+      }else{
+        tempStrBldr.append(u.getUsername());
+        tempStrBldr.append(makeSpacer(u.getUsername().length()));
+      }
+      tempLength = MAX_LENGTH - u.getPassword().length();
+      if(tempLength < 0){
+        String tempStr = u.getPassword().substring(0, 18) + "...";
+        tempStrBldr.append(tempStr).append(makeSpacer(tempStr.length()));
+      }else{
+        tempStrBldr.append(u.getPassword());
+        tempStrBldr.append(makeSpacer(u.getPassword().length()));
+      }
+      tempStrBldr.append(u.getRole());
+      //        System.out.println(tempString);
+      list.add(tempStrBldr.toString());
+    }
+    return list;
+  }
 
   /**
    * "success", "no_selection", "no_field_selection", "no_entry", "invalid_username", "invalid_password", "invalid_role"
@@ -83,8 +133,9 @@ public class AdminUserlistController {
     Button addUserBtn = new Button("Add User");
     Label noSelectionErrorLbl = new Label(errorList.get("no_selection"));
 //    Button addBtn  = new Button("Add");
-    listView.getItems().add("ID\tUsername\t\tRole\t\tPassword");
-    listView.getItems().addAll(db.getAllUsers());
+    listView.setStyle("-fx-font-family: monospace; -fx-font-weight: bold");
+    listView.getItems().setAll(TOP_ROW);
+    listView.getItems().addAll(makeList());
 
     listView.setOnMouseClicked(e -> {
       noSelectionErrorLbl.setText(" ");
@@ -134,8 +185,8 @@ public class AdminUserlistController {
           grabField.equals("Password") ? grabNewValue : "",
           grabField.equals("Role") ? grabNewValue : ""
           );
-      listView.getItems().setAll("ID\tUsername\t\tRole\t\tPassword");
-      listView.getItems().addAll(db.getAllUsers());
+      listView.getItems().setAll(TOP_ROW);
+      listView.getItems().addAll(makeList());
     });
 
     backBtn.setOnAction(e -> {

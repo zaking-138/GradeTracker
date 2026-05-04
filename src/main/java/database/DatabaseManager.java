@@ -21,6 +21,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import users.Admin;
+import users.Student;
+import users.Teacher;
+import users.User;
 
 public class DatabaseManager {
 
@@ -539,6 +543,42 @@ public class DatabaseManager {
                 String row = rs.getInt("user_id") + "\t" + rs.getString("username")
                     + "  \t" + rs.getString("role") + "\t\t" + rs.getString("password");
                 list.add(row);
+            }
+        } catch (SQLException e) {
+            System.out.println("getAllUsers failed: " + e.getMessage());
+        }
+        return list;
+    }
+
+    public List<User> getAllUsers(boolean asUserObject) {
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT user_id, username, password, role FROM users ORDER BY user_id";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                switch(rs.getString("role")){
+                    case "STUDENT":
+                        list.add(new Student(rs.getInt("user_id"),
+                            rs.getString("username"),
+                            rs.getString("password")
+                        ));
+                        break;
+                    case "TEACHER":
+                        list.add(new Teacher(rs.getInt("user_id"),
+                            rs.getString("username"),
+                            rs.getString("password")
+                        ));
+                        break;
+                    case "PROFESSOR":
+                        list.add(new Admin(rs.getInt("user_id"),
+                            rs.getString("username"),
+                            rs.getString("password")
+                        ));
+                        break;
+                    default:
+                        System.out.println("WHAT THE HELL");
+                        break;
+                }
             }
         } catch (SQLException e) {
             System.out.println("getAllUsers failed: " + e.getMessage());
