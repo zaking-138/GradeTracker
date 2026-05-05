@@ -32,6 +32,8 @@ public class UserListRepository {
         observers.remove(observer);
     }
 
+
+
     private void notifyObservers() {
         List<User> current = db.getAllUsers(true);
         for (UserListObserver o : observers) {
