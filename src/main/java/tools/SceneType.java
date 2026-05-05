@@ -20,6 +20,7 @@ public enum SceneType {
   PROF_DASH,
   PROF_USERLIST,
   PROF_GRDBK,
+  PROF_ASSIGNMENTS,
 
   // Student scene versions.
   STDNT_DASH,

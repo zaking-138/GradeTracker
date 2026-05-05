@@ -9,6 +9,7 @@ import static controllers.ProfessorGradebookController.profGrdBkBuild;
 import static controllers.ProfessorUserlistController.profUserlistBuild;
 import static controllers.StudentDashboardController.stdntDashBuild;
 import static controllers.StudentGradebookController.stdntGrdBkBuild;
+import static controllers.ProfessorAssignmentController.profAssignmentBuild;
 import static tools.Helpers.*;
 
 import java.util.Arrays;
@@ -48,6 +49,7 @@ public class SceneFactory {
       case PROF_DASH -> profDashBuild(stage);
       case PROF_USERLIST -> profUserlistBuild(stage);
       case PROF_GRDBK -> profGrdBkBuild(stage);
+      case PROF_ASSIGNMENTS -> profAssignmentBuild(stage);
 
       case STDNT_DASH -> stdntDashBuild(stage);
       case STDNT_GRDBK -> stdntGrdBkBuild(stage);

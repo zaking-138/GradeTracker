@@ -461,16 +461,18 @@ public class DatabaseManager {
 
     public ObservableList<String> getCoursesByTeacherObservable(int teacher_id){
         ObservableList<String> list = FXCollections.observableArrayList();
-        String sql = "SELECT course_code, course_name FROM courses WHERE teacher_id = ? ORDER BY course_code";
+        String sql = "SELECT course_id, course_code, course_name FROM courses WHERE teacher_id = ? ORDER BY course_code";
         try(PreparedStatement psmt = connection.prepareStatement(sql)){
             psmt.setInt(1, teacher_id);
             ResultSet rs = psmt.executeQuery();
             while (rs.next()) {
-                String row = rs.getString("course_code") + " - " + rs.getString("course_name");
+                String row = rs.getInt("course_id") + " | "
+                        + rs.getString("course_code") + " - "
+                        + rs.getString("course_name");
                 list.add(row);
             }
-        }catch (SQLException e){
-            System.out.println("getCoursesByTeacher failed: " + e.getMessage());
+        } catch (SQLException e){
+            System.out.println("getCoursesByTeacherObservable failed: " + e.getMessage());
         }
         return list;
     }
