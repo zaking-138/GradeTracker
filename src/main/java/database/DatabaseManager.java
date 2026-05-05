@@ -1,5 +1,6 @@
 package database;
 
+import courses.Course;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -274,11 +275,31 @@ public class DatabaseManager {
     }
 
     public void updateCourse(int course_id, String course_name, String course_code, int teacher_id){
+        var temp = getAllCourses(true);
+        Course oldInfo = null;
+        for(Course c : temp){
+            if (c.getCourseId() == course_id){
+                oldInfo = c;
+                break;
+            }
+        }
         String sql = "UPDATE courses SET course_name = ?, course_code = ?, teacher_id = ? WHERE course_id = ?";
         try(PreparedStatement pstmt = connection.prepareStatement(sql)){
-            pstmt.setString(1, course_name);
-            pstmt.setString(2, course_code);
-            pstmt.setInt(3, teacher_id);
+            if(!course_name.isEmpty()){
+                pstmt.setString(1, course_name);
+            }else{
+                pstmt.setString(1, oldInfo.getCourseName());
+            }
+            if(!course_code.isEmpty()){
+                pstmt.setString(2, course_code);
+            }else{
+                pstmt.setString(2, oldInfo.getCourseCode());
+            }
+            if(teacher_id >= 0){
+                pstmt.setInt(3, teacher_id);
+            }else{
+                pstmt.setInt(3, oldInfo.getTeacherId());
+            }
             pstmt.setInt(4, course_id);
             pstmt.executeUpdate();
         }
@@ -624,6 +645,25 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             System.out.println("getAllUsers failed: " + e.getMessage());
+        }
+        return list;
+    }
+
+    public List<Course> getAllCourses(boolean asCourseObject) {
+        List<Course> list = new ArrayList<>();
+        String sql = "SELECT course_id, course_name, course_code, teacher_id FROM courses ORDER BY course_id";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                list.add(new Course(rs.getInt("course_id"),
+                    rs.getString("course_name"),
+                    rs.getString("course_code"),
+                    rs.getInt("teacher_id")
+                ));
+
+            }
+        } catch (SQLException e) {
+            System.out.println("getAllCourses as course objects failed: " + e.getMessage());
         }
         return list;
     }
