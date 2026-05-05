@@ -230,8 +230,14 @@ public class AdminUserlistController {
     DatabaseManager db = DatabaseManager.getInstance();
     UserListRepository repo = UserListRepository.getInstance();
 
-    Label title = new Label("Displaying all users...");
-    title.setStyle("-fx-font-size: 18px;");
+    final String titleStrUsers = "GradeTracker 5000: User List";
+    final String instructionsStrUsers = "Select a user from the list to edit / remove or add a new one.";
+    final String titleStrCourses = "GradeTracker 5000: Course List";
+    final String instructionsStrCourses = "Select a course from the list edit / remove or add a new one.";
+
+    Label title = new Label(titleStrUsers);
+    Label instructions = new Label(instructionsStrUsers);
+    title.setStyle("-fx-font-size: 20px; -fx-font-weight: bold");
 
     TabPane tabPane = new TabPane();
     ListView<String> listView = new ListView<>();
@@ -294,7 +300,8 @@ public class AdminUserlistController {
       var temp = tabPane.getSelectionModel().getSelectedItem();
       switch (temp.getText()){
         case "Users":
-          title.setText("Displaying users...");
+          title.setText(titleStrUsers);
+          instructions.setText(instructionsStrUsers);
           inputField.setPromptText(" ");
           setVisible(editUserBtn, true);
           setVisible(addUserBtn, true);
@@ -303,7 +310,8 @@ public class AdminUserlistController {
           fieldSelection.setItems(fieldOptions);
           break;
         case "Courses":
-          title.setText("Displaying courses...");
+          title.setText(titleStrCourses);
+          instructions.setText(instructionsStrCourses);
           inputField.setPromptText(" ");
           setVisible(editUserBtn, false);
           setVisible(addUserBtn, false);
@@ -442,7 +450,7 @@ public class AdminUserlistController {
     tabPane.getTabs().addAll(usersTab, coursesTab);
     Pane vBoxSpacer = new Pane();
     VBox.setVgrow(vBoxSpacer, Priority.ALWAYS);
-    VBox layout = new VBox(12, title, tabPane, editRow, btnsRow, vBoxSpacer, backBtn);
+    VBox layout = new VBox(12, title, instructions, tabPane, editRow, btnsRow, vBoxSpacer, backBtn);
     layout.setPadding(new Insets(16));
     return new Scene(layout, getScreenSize().get("w"), getScreenSize().get("h"));
   }
