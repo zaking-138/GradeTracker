@@ -1,69 +1,64 @@
 package controllers;
 
+import static tools.Helpers.getScene;
+
 import database.DatabaseManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Pos;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import tools.Grades;
+import tools.SceneManager;
+import tools.SceneType;
+import tools.Session;
 
-import static tools.Helpers.setVisible;
-
-/**
- * @author Zachary King
- * <br>
- * created:
- * @since 0.1.0
- */
 public class StudentGradebookController {
-
-  private static int selectedUserId;
-  private static String selectedRow;
-
-  public static void setSelectedRow(String selectedRow) {
-    StudentGradebookController.selectedRow = selectedRow;
-  }
-
-  public static void setSelectedUserId(int selectedUserId) { StudentGradebookController.selectedUserId = selectedUserId;
-  }
 
   public static Scene stdntGrdBkBuild(Stage stage) {
     DatabaseManager db = DatabaseManager.getInstance();
+    int studentId = Session.getCurrentUserId();
 
-    Label title = new Label("Displaying your grade book...");
+    BorderPane base = new BorderPane();
+
+    Label title = new Label("Your Gradebook");
     title.setStyle("-fx-font-size: 18px;");
 
     ListView<String> listView = new ListView<>();
+    ObservableList<String> displayRows = FXCollections.observableArrayList();
 
-    TextField inputField = new TextField();
-    ObservableList<String> fieldOptions = FXCollections.observableArrayList(
-            "Class",
-            "Grade",
-            "Professor"
-    );
-    ComboBox<String> fieldSelection = new ComboBox<>(fieldOptions);
-    HBox editRow = new HBox(8);
-    editRow.setAlignment(Pos.CENTER);
-    HBox.setHgrow(inputField, Priority.ALWAYS);
-    editRow.getChildren().addAll(new Label("Select field: "),
-            fieldSelection, new Label("New Value: "), inputField);
-    setVisible(editRow, false);
+    for (String row : db.getGradesForStudent(studentId)) {
+      String[] parts = row.split("\\|");
+      if (parts.length >= 3) {
+        String titlePart = parts[0].trim();
+        double score = Double.parseDouble(parts[1].replace("Score:", "").trim());
+        double maxScore = Double.parseDouble(parts[2].replace("Score:", "").trim());
+        String feedback = parts[2].replace("Feedback:", "").trim();
 
-    Button editUserBtn = new Button("Edit");
-    Button removeUserBtn = new Button("Remove");
-    Button addUserBtn = new Button("Add User");
+        displayRows.add(Grades.toStringGrade(titlePart, score, maxScore,feedback));
+      } else {
+        displayRows.add(row);
+      }
+    }
 
-    Label noSelectionErrorLbl = new Label();
-    setVisible(noSelectionErrorLbl, false);
-    noSelectionErrorLbl.setText("Select a valid grade entry.");
-    setVisible(noSelectionErrorLbl, true);
-    listView.getItems().add("Class\t\tGrade\t\tProfessor");
+    if (displayRows.isEmpty()) {
+      displayRows.add("No grades available.");
+    }
 
+    listView.setItems(displayRows);
 
-    return null;
+    Button backBtn = new Button("Back");
+    backBtn.setOnAction(e -> SceneManager.getInstance().navigateTo(SceneType.STDNT_DASH, true));
+
+    VBox content = new VBox(12, title, listView, backBtn);
+    content.setPadding(new Insets(16));
+
+    base.setCenter(content);
+    return getScene(base);
   }
-
 }
