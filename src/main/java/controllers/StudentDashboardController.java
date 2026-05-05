@@ -52,7 +52,7 @@ public class StudentDashboardController {
     TabPane  tabPane = new TabPane();
 
     ListView<String> gradesList = new ListView<>();
-    if (studentId == -1) {
+    if (studentId != -1) {
       gradesList.setItems(db.getGradesByStudentObservable(studentId));
     }
     if (gradesList.getItems().isEmpty()) {
@@ -75,20 +75,24 @@ public class StudentDashboardController {
     assignmentsTab.setClosable(false);
 
     coursesList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-      if (newValue != null &&  !newValue.equals("|")) {
-        try{
-          int courseId = Integer.parseInt(newValue.split("\\|")[0].trim());
-          ObservableList<String> assignments = db.getAssignmentsByCourseObservable(courseId);
+      if (newValue == null || newValue.isBlank()) {
+        assignmentsList.getItems().setAll("Select a course from the Courses tab.");
+        return;
+      }
 
-          if (assignments.isEmpty()) {
-            assignmentsList.getItems().add("No assignments for this course.");
-          }else {
-            assignmentsList.setItems(assignments);
-          }
-          tabPane.getSelectionModel().select(assignmentsTab);
-        }catch (NumberFormatException e){
-          assignmentsList.getItems().setAll("Could not load assignments");
+      try {
+        int courseId = Integer.parseInt(newValue.split("\\|")[0].trim());
+        ObservableList<String> assignments = db.getAssignmentsByCourseObservable(courseId);
+
+        if (assignments == null || assignments.isEmpty()) {
+          assignmentsList.getItems().setAll("No assignments for this course.");
+        } else {
+          assignmentsList.setItems(assignments);
         }
+
+        tabPane.getSelectionModel().select(assignmentsTab);
+      } catch (Exception ex) {
+        assignmentsList.getItems().setAll("Could not load assignments.");
       }
     });
 
