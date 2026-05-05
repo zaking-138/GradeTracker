@@ -68,6 +68,7 @@ public class ProfessorAssignmentController {
 
         Runnable refreshAssignments = () -> {
             String selectedCourse = courseBox.getValue();
+            System.out.println(selectedCourse);
             if (selectedCourse == null || selectedCourse.isBlank()) {
                 assignmentsList.getItems().setAll("Select a course to view assignments.");
                 return;
@@ -77,7 +78,7 @@ public class ProfessorAssignmentController {
                 int courseId = Integer.parseInt(selectedCourse.split("\\|")[0].trim());
                 ObservableList<String> assignments = db.getAssignmentsByCourseObservable(courseId);
 
-                if (assignments.isEmpty()) {
+                if (assignments == null || assignments.isEmpty()) {
                     assignmentsList.getItems().setAll("No assignments for this course.");
                 } else {
                     assignmentsList.setItems(assignments);
@@ -88,6 +89,7 @@ public class ProfessorAssignmentController {
         };
 
         addBtn.setOnAction(e -> {
+            refreshAssignments.run();
             status.setText("");
             status.setStyle("-fx-text-fill: red;");
             setVisible(status, false);
@@ -155,6 +157,7 @@ public class ProfessorAssignmentController {
             descriptionField.clear();
             maxPointsField.clear();
             dueDateField.clear();
+            refreshAssignments.run();
         });
 
         refreshBtn.setOnAction(e -> refreshAssignments.run());
