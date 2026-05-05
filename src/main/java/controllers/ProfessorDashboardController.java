@@ -55,9 +55,15 @@ public class ProfessorDashboardController {
       SceneManager.getInstance().navigateTo(SceneType.PROF_GRDBK, true);
     });
 
+    Label assignmentListBtnLbl = new Label("Open assignments: ");
+    Button assignmentBtn = new Button("Assignments");
+    assignmentBtn.setOnAction(e -> {
+      SceneManager.getInstance().navigateTo(SceneType.PROF_ASSIGNMENTS, true);
+    });
+
 
     HBox hbox01 = new HBox();
-    hbox01.getChildren().addAll(userListBtnLbl, userListBtn, gradeListBtnLbl, gradeListBtn);
+    hbox01.getChildren().addAll(userListBtnLbl, userListBtn, gradeListBtnLbl, gradeListBtn,  assignmentListBtnLbl, assignmentBtn);
     hbox01.setAlignment(Pos.CENTER);
 
     VBox vbox01 = new VBox();
