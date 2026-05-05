@@ -25,6 +25,7 @@ import tools.SceneManager;
 import tools.SceneType;
 
 import org.mindrot.jbcrypt.BCrypt;
+import tools.UserListRepository;
 
 /**
  * [Brief one-sentence desciption of what this class does.]
@@ -140,12 +141,13 @@ public class SignUpController {
             }
 
 
-            passwordErrorLabel.setText("Added user: " + grabUsername + "\npw:" + grabPassword + "\t" + confPassword + "\nrole:" + roleSelection);
+            passwordErrorLabel.setText("Added user: " + grabUsername);
             setVisible(passwordErrorLabel, true);
             setVisible(passwordMessageBox, true);
 
             String hashedPassword = BCrypt.hashpw(grabPassword, BCrypt.gensalt());
-            DatabaseManager.getInstance().insertUser(grabUsername, hashedPassword, roleSelection.toUpperCase());
+            UserListRepository.getInstance().add(grabUsername, hashedPassword, roleSelection.toUpperCase());
+//            DatabaseManager.getInstance().insertUser();
         });
 
         login.setOnAction(e -> SceneManager.getInstance().navigateTo(SceneType.LOGIN, true));
