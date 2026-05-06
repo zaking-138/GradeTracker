@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import tools.SceneManager;
 import tools.SceneType;
+import tools.Session;
 
 /**
  * @author Zachary King
@@ -30,10 +31,11 @@ public class AdminDashboardController {
 
     Button logoutBtn = new Button("Logout");
     logoutBtn.setOnAction(e -> {
+      Session.clear();
       SceneManager.getInstance().navigateTo(SceneType.LOGIN, true);
     });
 
-    Label welcomeLbl = new Label("Welcome, " + getCurrentUser() + "!");
+    Label welcomeLbl = new Label("Welcome, " + Session.getCurrentUsername() + "!");
 
     Label userListBtnLbl = new Label("Open full userlist: ");
     Button userListBtn = new Button("Userlist");
