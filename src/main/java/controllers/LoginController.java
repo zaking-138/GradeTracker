@@ -119,9 +119,9 @@ public class LoginController {
         Session.setCurrentUser(userId, username, role);
         System.out.println((String) role);
         switch (role) {
-          case "ADMIN" -> SceneManager.getInstance().navigateTo(SceneType.ADMIN_DASH);
+          case "ADMIN" -> SceneManager.getInstance().navigateTo(SceneType.ADMIN_DASH, true);
           case "STUDENT" -> SceneManager.getInstance().navigateTo(SceneType.STDNT_DASH, true);
-          case "TEACHER" -> SceneManager.getInstance().navigateTo(SceneType.PROF_DASH);
+          case "TEACHER" -> SceneManager.getInstance().navigateTo(SceneType.PROF_DASH, true);
           default -> SceneManager.getInstance().navigateTo(SceneType.LOGIN);
         }
 
