@@ -39,15 +39,19 @@ public class UserNotification {
         });
 
         HBox buttons = new HBox(10, yesButton, noButton);
-        buttons.setAlignment(Pos.TOP_RIGHT);
+        buttons.setAlignment(Pos.CENTER);
 
         VBox vbox01 = new VBox();
         Pane vBoxSpacer = new Pane();
         VBox.setVgrow(vBoxSpacer, Priority.ALWAYS);
-        vbox01.getChildren().addAll(yesButton, noButton);
-        vbox01.setAlignment(Pos.TOP_RIGHT);
+        vbox01.getChildren().addAll(message, buttons);
+        vbox01.setAlignment(Pos.CENTER);
 
         Scene scene = new Scene(vbox01, 300, 100);
+
+        popup.setScene(scene);
+        popup.setTitle("WARNING!!!");
+        popup.setAlwaysOnTop(true);
         popup.show();
     }
 }

@@ -1,6 +1,7 @@
 package controllers;
 
 import static tools.Helpers.*;
+import static tools.UserNotification.addNotification;
 
 import courses.Course;
 import database.DatabaseManager;
@@ -433,6 +434,12 @@ public class AdminUserlistController {
       popup.setScene(temp);
       popup.setAlwaysOnTop(true);
       popup.show();
+    });
+
+    removeUserBtn.setOnAction(e -> {
+      if(selectedUserId != -1) {
+        addNotification(repo.getUserInfo(selectedUserId));
+      }
     });
 
     HBox btnsRow = new HBox(8);

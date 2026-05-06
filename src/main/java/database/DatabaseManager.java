@@ -308,6 +308,11 @@ public class DatabaseManager {
         }
     }
 
+    public void deleteUser(int user_id) {
+        Map<String, String> oldInfo = getUser(user_id);
+        deleteUser(oldInfo.get("username"));
+    }
+
     public void updateUser(int user_id, String username, String password, String role){
         Map<String, String> oldInfo = getUser(user_id);
         String sql =  "UPDATE users SET username = ?, password = ?, role = ? WHERE user_id = ?";
