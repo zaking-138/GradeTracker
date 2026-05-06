@@ -232,9 +232,9 @@ public class AdminUserlistController {
     UserListRepository repo = UserListRepository.getInstance();
 
     final String titleStrUsers = "GradeTracker 5000: User List";
-    final String instructionsStrUsers = "Select a user from the list to edit / remove or add a new one.";
+    final String instructionsStrUsers = "Select a user from the list to edit / remove, or add a new one.";
     final String titleStrCourses = "GradeTracker 5000: Course List";
-    final String instructionsStrCourses = "Select a course from the list edit / remove or add a new one.";
+    final String instructionsStrCourses = "Select a course from the list to edit / remove, or add a new one.";
 
     Label title = new Label(titleStrUsers);
     Label instructions = new Label(instructionsStrUsers);
@@ -367,11 +367,6 @@ public class AdminUserlistController {
         return;
       }
       noSelectionErrorLbl.setText(errorList.get("success"));
-//      setVisible(noSelectionErrorLbl, true);
-//      System.out.println(selectedUserId + ": " + grabField + " --> " + grabNewValue);
-//      Map<String, String> userInfo = DatabaseManager.getInstance().getUser(selectedUserId);
-//      System.out.println(
-//          userInfo.get("username") + " " + userInfo.get("password") + " " + userInfo.get("role"));
       repo.update(selectedUserId,
               grabField.equals("Username") ? grabNewValue : "",
               grabField.equals("Password") ? grabNewValue : "",
@@ -379,8 +374,6 @@ public class AdminUserlistController {
       );
       inputField.setPromptText("");
       resetUserVars();
-//        listView.getItems().setAll(TOP_ROW);
-//        listView.getItems().addAll(makeList());
     });
 
     editCourseBtn.setOnAction(e -> {
@@ -451,9 +444,8 @@ public class AdminUserlistController {
     setVisible(noSelectionErrorLbl, false);
     btnsRow.getChildren()
             .addAll(editUserBtn, editCourseBtn, noSelectionErrorLbl, btnsRowSpacer,
-                    addUserBtn, addCourseBtn, btnsRowSpacer01, removeUserBtn);
-
-//    HBox.setHgrow(removeUserBtn, Priority.ALWAYS);
+                    addUserBtn, addCourseBtn, btnsRowSpacer01, removeUserBtn
+            );
     tabPane.getTabs().addAll(usersTab, coursesTab);
     Pane vBoxSpacer = new Pane();
     VBox.setVgrow(vBoxSpacer, Priority.ALWAYS);
