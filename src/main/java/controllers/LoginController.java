@@ -137,15 +137,15 @@ public class LoginController {
 
 
     VBox root1 = new VBox(12,
-        header,
-        usernameHBox,
-        usernameErrorLabel,
-        passwordHBox,
-        errorLbl,
-        showPasswordBtn,
-        passwordErrorLabel,
-        revealedPassword,
-        buttonsBox
+            header,
+            usernameHBox,
+            usernameErrorLabel,
+            passwordHBox,
+            errorLbl,
+            showPasswordBtn,
+            passwordErrorLabel,
+            revealedPassword,
+            buttonsBox
 //        ,admin_test
     );
     root1.setPadding(new Insets(30));
