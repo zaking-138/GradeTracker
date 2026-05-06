@@ -1,5 +1,6 @@
 package database;
 
+import courses.Assignment;
 import courses.Course;
 import java.util.HashMap;
 import java.util.Map;
@@ -410,6 +411,24 @@ public class DatabaseManager {
             while (rs.next()) {
                 String row = rs.getString("title") + " | Due: " + rs.getString("due_date") + " | Max Points: " + rs.getDouble("max_points");
                 list.add(row);
+            }
+        } catch (SQLException e) {
+            System.out.println("getAssignmentsByCourse failed: " + e.getMessage());
+        }
+        return list;
+    }
+
+    public List<Assignment> getAssignmentsByCourse(int course_id, boolean asAssignmentObj) {
+        List<Assignment> list = new ArrayList<>();
+        String sql = " SELECT assignment_id, title, due_date, max_points, course_id, description " +
+                "FROM assignments WHERE course_id = ? ORDER BY due_date ";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, course_id);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                list.add(new Assignment(rs.getInt("assignment_id"), rs.getString("title"),
+                        rs.getString("description"), rs.getInt("max_points"),
+                        rs.getInt("due_date"), rs.getInt("course_id")));
             }
         } catch (SQLException e) {
             System.out.println("getAssignmentsByCourse failed: " + e.getMessage());

@@ -155,11 +155,13 @@ public class SignUpController {
             String hashedPassword = BCrypt.hashpw(grabPassword, BCrypt.gensalt());
             UserListRepository.getInstance().add(grabUsername, hashedPassword, roleSelection.toUpperCase());
 
-            switch (roleSelection) {
-                case "Admin" -> SceneManager.getInstance().navigateTo(SceneType.ADMIN_DASH);
-                case "Student" -> SceneManager.getInstance().navigateTo(SceneType.STDNT_DASH, true);
-                case "Teacher" -> SceneManager.getInstance().navigateTo(SceneType.PROF_DASH);
-                default -> SceneManager.getInstance().navigateTo(SceneType.SIGNUP);
+            if(!hideLogin){
+                switch (roleSelection) {
+                    case "Admin" -> SceneManager.getInstance().navigateTo(SceneType.ADMIN_DASH);
+                    case "Student" -> SceneManager.getInstance().navigateTo(SceneType.STDNT_DASH, true);
+                    case "Teacher" -> SceneManager.getInstance().navigateTo(SceneType.PROF_DASH);
+                    default -> SceneManager.getInstance().navigateTo(SceneType.SIGNUP);
+                }
             }
         });
 

@@ -3,6 +3,7 @@ package controllers;
 import static tools.Helpers.getScene;
 import static tools.Helpers.setVisible;
 
+import courses.Assignment;
 import database.DatabaseManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,6 +20,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import tools.AssignmentRepository;
 import tools.SceneManager;
 import tools.SceneType;
 import tools.Session;
@@ -65,6 +67,9 @@ public class ProfessorAssignmentController {
 
         HBox buttonRow = new HBox(10, addBtn, refreshBtn, backBtn);
         buttonRow.setAlignment(Pos.CENTER_LEFT);
+//        AssignmentRepository.getInstance().addObserver(assignments -> {
+//            assignmentsList.getItems().setAll(assignments);
+//        });
 
         Runnable refreshAssignments = () -> {
             String selectedCourse = courseBox.getValue();
