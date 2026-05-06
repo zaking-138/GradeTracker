@@ -1,6 +1,7 @@
 package controllers;
 
 import static tools.Helpers.*;
+import static tools.UserNotification.addNotification;
 
 import courses.Course;
 import database.DatabaseManager;
@@ -46,14 +47,14 @@ public class AdminUserlistController {
   private static final int SPACER_SPACE = MAX_LENGTH + 5;
 
   private static final String TOP_ROW_USER = "ID" + makeSpacer("ID".length())
-      + "Username" + makeSpacer("Username".length())
-      + "Password" + makeSpacer("Password".length())
-      + "Role";
+          + "Username" + makeSpacer("Username".length())
+          + "Password" + makeSpacer("Password".length())
+          + "Role";
 
   private static final String TOP_ROW_COURSES = "ID" + makeSpacer("ID".length())
-      + "Course Name" + makeSpacer("Course Name".length())
-      + "Code" + makeSpacer("Code".length())
-      + "Teacher ID" + makeSpacer("Teacher ID".length());
+          + "Course Name" + makeSpacer("Course Name".length())
+          + "Code" + makeSpacer("Code".length())
+          + "Teacher ID" + makeSpacer("Teacher ID".length());
   private static void resetUserVars(){
     setSelectedRow(null);
     setSelectedUserId(-1);
@@ -129,13 +130,13 @@ public class AdminUserlistController {
    * "invalid_password", "invalid_role"
    */
   private static final Map<String, String> errorList = Map.of(
-      "success", "Entry edited!",
-      "no_selection", "Error: Select valid item from list!",
-      "no_field_selection", "Error: Select field to edit!",
-      "no_entry", "Error: New value cannot be empty!",
-      "invalid_username", "Error: New username is invalid!",
-      "invalid_password", "Error: New password is invalid!",
-      "invalid_role", "Error: New role is invalid!"
+          "success", "Entry edited!",
+          "no_selection", "Error: Select valid item from list!",
+          "no_field_selection", "Error: Select field to edit!",
+          "no_entry", "Error: New value cannot be empty!",
+          "invalid_username", "Error: New username is invalid!",
+          "invalid_password", "Error: New password is invalid!",
+          "invalid_role", "Error: New role is invalid!"
   );
 
   public static void setSelectedRow(String selectedRow) {
@@ -264,14 +265,14 @@ public class AdminUserlistController {
 
     TextField inputField = new TextField();
     ObservableList<String> fieldOptionsCourses = FXCollections.observableArrayList(
-        "Course Name",
-        "Course Code",
-        "Teacher ID"
+            "Course Name",
+            "Course Code",
+            "Teacher ID"
     );
     ObservableList<String> fieldOptions = FXCollections.observableArrayList(
-        "Username",
-        "Password",
-        "Role"
+            "Username",
+            "Password",
+            "Role"
     );
     ComboBox<String> fieldSelection = new ComboBox<>();
     fieldSelection.setItems(fieldOptions);
@@ -279,7 +280,7 @@ public class AdminUserlistController {
     editRow.setAlignment(Pos.CENTER);
     HBox.setHgrow(inputField, Priority.ALWAYS);
     editRow.getChildren().addAll(new Label("Select field: "),
-        fieldSelection, new Label("New Value: "), inputField);
+            fieldSelection, new Label("New Value: "), inputField);
     setVisible(editRow, false);
 
     Button editUserBtn = new Button("Edit");
@@ -372,9 +373,9 @@ public class AdminUserlistController {
 //      System.out.println(
 //          userInfo.get("username") + " " + userInfo.get("password") + " " + userInfo.get("role"));
       repo.update(selectedUserId,
-          grabField.equals("Username") ? grabNewValue : "",
-          grabField.equals("Password") ? grabNewValue : "",
-          grabField.equals("Role") ? grabNewValue : ""
+              grabField.equals("Username") ? grabNewValue : "",
+              grabField.equals("Password") ? grabNewValue : "",
+              grabField.equals("Role") ? grabNewValue : ""
       );
       inputField.setPromptText("");
       resetUserVars();
@@ -408,9 +409,9 @@ public class AdminUserlistController {
       setVisible(noSelectionErrorLbl, true);
       System.out.println(selectedCourseId + ": " + grabField + " --> " + grabNewValue);
       CourseRepository.getInstance().update(selectedCourseId,
-          grabField.equals("Course Name") ? grabNewValue : "",
-          grabField.equals("Course Code") ? grabNewValue : "",
-          grabField.equals("Teacher ID") ? Integer.parseInt(grabNewValue.strip()) : -1
+              grabField.equals("Course Name") ? grabNewValue : "",
+              grabField.equals("Course Code") ? grabNewValue : "",
+              grabField.equals("Teacher ID") ? Integer.parseInt(grabNewValue.strip()) : -1
       );
       inputField.setPromptText("");
       resetCourseVars();
@@ -435,6 +436,12 @@ public class AdminUserlistController {
       popup.show();
     });
 
+    removeUserBtn.setOnAction(e -> {
+      if(selectedUserId != -1) {
+        addNotification(repo.getUserInfo(selectedUserId));
+      }
+    });
+
     HBox btnsRow = new HBox(8);
     btnsRow.setAlignment(Pos.CENTER);
     Pane btnsRowSpacer = new Pane();
@@ -443,8 +450,8 @@ public class AdminUserlistController {
     HBox.setHgrow(btnsRowSpacer01, Priority.ALWAYS);
     setVisible(noSelectionErrorLbl, false);
     btnsRow.getChildren()
-        .addAll(editUserBtn, editCourseBtn, noSelectionErrorLbl, btnsRowSpacer,
-            addUserBtn, addCourseBtn, btnsRowSpacer01, removeUserBtn);
+            .addAll(editUserBtn, editCourseBtn, noSelectionErrorLbl, btnsRowSpacer,
+                    addUserBtn, addCourseBtn, btnsRowSpacer01, removeUserBtn);
 
 //    HBox.setHgrow(removeUserBtn, Priority.ALWAYS);
     tabPane.getTabs().addAll(usersTab, coursesTab);

@@ -35,7 +35,7 @@
 //    }
 //
 //    private void notifyObservers(int course_id) {
-//        List<Assignment> current = db.getAssignmentsByCourse();
+////        List<Assignment> current = db.getAssignmentsByCourse(course_id);
 //        for (AssignmentListObserver o : observers) {
 //            o.onAssignmentsChanged(current);
 //        }

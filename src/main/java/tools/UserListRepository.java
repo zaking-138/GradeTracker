@@ -32,7 +32,9 @@ public class UserListRepository {
         observers.remove(observer);
     }
 
-
+    public String getUserInfo(int user_id) {
+        return db.getUser(user_id).get("username");
+    }
 
     private void notifyObservers() {
         List<User> current = db.getAllUsers(true);

@@ -39,5 +39,5 @@ public class Grades {
                 + " | Letter: " + letter
                 + " | Feedback: " + feed;
     }
-    
+
 }
